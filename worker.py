@@ -172,8 +172,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     if name == '1':
         # print(intr)
         x = [z for z in range(episode)]
-        # fname = algo + '_CartPole_no_rewards_.png'
+        fname = algo + '_CartPole_no_rewards_.png'
         # fname1 = algo + '_CartPole_intrinsic_reward1'
-        # plot_learning_curve(x, scores, fname)
+        plot_learning_curve(x, scores, fname)
         # plot_intrinsic_reward(x, intr, fname1)
         # plot_learning_curve_with_shaded_error(x, scores, fname)

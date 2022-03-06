@@ -95,7 +95,8 @@ class ActorCritic(nn.Module):
         self.gru = nn.GRUCell(256, 256)
         self.pi = nn.Linear(256, n_actions)
         self.v = nn.Linear(256, 1)
-
+        device = T.device('cpu')
+        self.to(device)
     # It will take a state/image and a hidden state for our GRU as an input
 #    def forward(self, state, hx):
     def forward(self, img, hx):

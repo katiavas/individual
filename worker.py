@@ -1,3 +1,4 @@
+
 import gym
 import numpy as np
 import torch as T
@@ -47,10 +48,10 @@ def get_image(env):
     img = env.render(mode='rgb_array').transpose((2, 0, 1))
     img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     img_rgb_resized = cv2.resize(img_rgb, (240, 160), interpolation=cv2.INTER_CUBIC)
+    # make all pixels black
     img_rgb_resized[img_rgb_resized < 255] = 0
     # make pixel values between 0 and 1
-    img_rgb_resized = img_rgb_resized / 255
-
+    # img_rgb_resized = img_rgb_resized / 255
     return img_rgb_resized
 
 
@@ -83,26 +84,25 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     intr = []
     while episode < max_eps:
         obs = env.reset()
-        # make your hidden state for the actor critic a3c
+
+        # make your hidden state for the actor critic ac3
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode
         # every 20 steps in an episode we want to execute the learning function
         score, done, ep_steps = 0, False, 0
         while not done:
             # state = T.tensor([obs], dtype=T.float)
-            input_img = env.render(mode='rgb_array').transpose((2, 0, 1))
+            # input_img = env.render(mode='rgb_array').transpose((2, 0, 1))
+            input_img = get_image(env)
             # print("input img worker render", input_img.shape)
             state = T.tensor([input_img], dtype=T.float)
             # print("state/input img shape in worker", state.shape)
             # input_img = get_screen(env)
-            # print(input_img)
             # feed forward our state and our hidden state to the local agent to get the action we want to take,
             # value for that state, log_prob for that action
             action, value, log_prob, hx = local_agent(state, hx)
-            # input_img = green_screen(env)
-            # print(input_img)
             # shape of input_img: (400,600,3)
-            # observation represents environments next state
+            '''observation represents environment's next state// obs = new_state'''
             # take your action
             obs_, reward, done, info = env.step(action)
             # increment total steps, episode steps, increase your score

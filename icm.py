@@ -96,7 +96,7 @@ class ICM(nn.Module):
         return pi_logits, state_
 
     def calc_loss(self, state, new_state, action):
-        state = T.tensor(state, dtype=T.float)
+        # state = T.tensor(state, dtype=T.float)
         action = T.tensor(action, dtype=T.float)
         new_state = T.tensor(new_state, dtype=T.float)
         # feed/pass state, new_state , action through our network

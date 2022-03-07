@@ -53,6 +53,8 @@ class ICM(nn.Module):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
+        self.encoder = Encoder(feature_dim=64)
+
         # hard coded for cartPole environment
         self.inverse = nn.Linear(4 * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)

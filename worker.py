@@ -95,7 +95,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
             input_img = resize(input_img, (3, 240, 160))
-            input_img = input_img.transpose((0, 1, 2 ))
+            input_img = input_img.transpose((0, 1, 2))
             # input_img = get_image(env)
             # print("input img worker render", input_img.shape)
             state = T.tensor([input_img], dtype=T.float)
@@ -105,9 +105,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # feed forward our state and our hidden state to the local agent to get the action we want to take,
             # value for that state, log_prob for that action
             action, value, log_prob, hx = local_agent(state, hx)
-            # input_img = green_screen(env)
-            # print(input_img)
-            # shape of input_img: (400,600,3)
+            # shape of input_img: (400,600,3) ... after resize:(240,160,3)
             # observation represents environments next state
             # take your action
             obs_, reward, done, info = env.step(action)

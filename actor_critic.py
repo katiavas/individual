@@ -23,7 +23,7 @@ class Encoder(nn.Module):
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape for CartPole-v0
+        self.fc1 = nn.Linear(1228800, feature_dim)  # shape for CartPole-v0 after resize
 
 
     def forward(self, img):
@@ -152,8 +152,7 @@ class ActorCritic(nn.Module):
         # We need a value function for the state one step after our horizon
         # get the first element because other elements that the forward function returns are not the value function
         # (we want the element v )
-        next_v = T.zeros(1, 1) if done else self.forward(T.tensor([new_states],
-                                         dtype=T.float), hx)[1]
+        next_v = T.zeros(1, 1) if done else self.forward(new_states, hx)[1]
 
         values.append(next_v.detach())
         values = T.cat(values).squeeze()  # concatenate -> cat

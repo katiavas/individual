@@ -53,7 +53,6 @@ def get_image(env):
     # img_rgb_resized[img_rgb_resized < 255] = 0
     # make pixel values between 0 and 1
     img_rgb_resized = img_rgb_resized / 255
-
     return img_rgb_resized
 
 
@@ -85,7 +84,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
-        obs = env.reset()
+        state = env.reset()
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode

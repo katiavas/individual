@@ -2,6 +2,7 @@ import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 # CartPole ++> n_actions = 2 , input_shape/input_dims = 4
 # Acrobot --> n_actions = 3 , input_shape/input_dims = 6
 # self.inverse = nn.Linear(6*2, 256)
@@ -9,8 +10,8 @@ import torch.nn.functional as F
 # self.new_state = nn.Linear(256, *input_dims)
 # Breakout --> n_actions = 4 , input_shape/input_dims = rgb
 
-
 class Encoder(nn.Module):
+
     def __init__(self, feature_dim=64):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
@@ -21,21 +22,22 @@ class Encoder(nn.Module):
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
         # print(self.conv1)
         #  determine the actual shape of the flattened output after the first convolutional layers.
-        self.fc1 = nn.Linear(7680000, feature_dim)
+        # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
+        # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
+        self.fc1 = nn.Linear(1228800, feature_dim)  # shape for CartPole-v0 after resize
 
     def forward(self, img):
-        # print(img)
+        # print("expected input", img.shape)
         enc = self.conv1(img)
-        print(img)
+        # print(img.shape)
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
-        print('put this shape into the fc1 layer: ', enc_flatten.size())
+        # print('put this shape into the fc1 layer: ', enc_flatten.size())
         features = self.fc1(enc_flatten)
-        # F.softmax(features, dim=1)
+        # print("features", features.shape)
         return features
-
 
 
 '''In the inverse model you want to predict the action the agent took to cause this state to transition from time t to t+1

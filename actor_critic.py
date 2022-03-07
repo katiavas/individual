@@ -32,7 +32,7 @@ class Encoder(nn.Module):
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
-        print('put this shape into the fc1 layer: ', enc_flatten.size())
+        # print('put this shape into the fc1 layer: ', enc_flatten.size())
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
@@ -97,6 +97,7 @@ class ActorCritic(nn.Module):
         self.v = nn.Linear(256, 1)
         device = T.device('cpu')
         self.to(device)
+
     # It will take a state/image and a hidden state for our GRU as an input
 #    def forward(self, state, hx):
     def forward(self, img, hx):

@@ -95,7 +95,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # state = T.tensor([obs], dtype=T.float)
             # input_img = env.render(mode='rgb_array').transpose((2, 0, 1))
             input_img = get_image(env)
-            input_img = input_img.transpose((2,0,1))
+            # input_img = input_img.transpose((2,0,1))
             # print("input img worker render", input_img.shape)
             state = T.tensor([input_img], dtype=T.float)
             # print("state/input img shape in worker", state.shape)

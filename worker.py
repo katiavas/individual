@@ -45,19 +45,14 @@ def prepare_initial_state(state, N=3):
 
 def get_image(env):
     img = env.render(mode='rgb_array').transpose((2, 0, 1))
+    print(img.shape)
     # convert an image from one colour space to another(from rgb to gray)
     # img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_rgb_resized = img
-    if img is None:
-        print('Wrong path:')
-    else:
-        img_rgb_resized = cv2.resize(img, (240, 160), interpolation=cv2.INTER_CUBIC)
-
-    # img_rgb_resized = cv2.resize(img, (240, 160), interpolation=cv2.INTER_CUBIC)
+    img_rgb_resized = cv2.resize(img, (240, 160), interpolation=cv2.INTER_CUBIC)
     # make all pixels black
     # img_rgb_resized[img_rgb_resized < 255] = 0
     # make pixel values between 0 and 1
-    # img_rgb_resized = img_rgb_resized / 255
+    img_rgb_resized = img_rgb_resized / 255
 
     return img_rgb_resized
 

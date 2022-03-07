@@ -114,7 +114,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             ep_steps += 1
             score += reward
             reward = 0  # turn off extrinsic rewards
-            memory.remember(obs, action, reward, obs_, value, log_prob)
+            memory.remember(state, action, reward, obs_, value, log_prob)
             # obs = obs_
             obs = state
             # shape of obs: (4,)

@@ -27,14 +27,14 @@ class Encoder(nn.Module):
 
 
     def forward(self, img):
-        print("expected input", img.shape)
+        # print("expected input", img.shape)
         enc = self.conv1(img)
         # print(img.shape)
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
-        print('put this shape into the fc1 layer: ', enc_flatten.size())
+        # print('put this shape into the fc1 layer: ', enc_flatten.size())
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
@@ -104,7 +104,7 @@ class ActorCritic(nn.Module):
 #    def forward(self, state, hx):
     def forward(self, img, hx):
         state = self.encoder(img)
-        print("Forward model state/img shape", state.shape)
+        # print("Forward model state/img shape", state.shape)
         x = F.relu(self.input(state))
         x = F.relu(self.dense(x))
         hx = self.gru(x, hx)

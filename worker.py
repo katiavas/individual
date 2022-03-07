@@ -11,7 +11,7 @@ import cv2
 # from utils import plot_learning_curve_with_shaded_error
 import matplotlib.pyplot as plt
 
-# from skimage.transform import resize
+from skimage.transform import resize
 
 '''
 def downscale_obs(obs, new_size=(42, 42), to_gray=True):
@@ -93,12 +93,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         score, done, ep_steps = 0, False, 0
         while not done:
             # state = T.tensor([obs], dtype=T.float)
-            # input_img = env.render(mode='rgb_array').transpose((2, 0, 1))
-            input_img = get_image(env)
-            # input_img = input_img.transpose((2,0,1))
+            input_img = env.render(mode='rgb_array')
+            input_img = resize(input_img, (3, 240, 160))
+            # input_img = get_image(env)
             # print("input img worker render", input_img.shape)
             state = T.tensor([input_img], dtype=T.float)
-            state = T.tensor([state], dtype=T.float)
             print("state/input img shape in worker", state.shape)
             # input_img = get_screen(env)
             # print(input_img)

@@ -48,7 +48,7 @@ def get_image(env):
     print(img.shape)
     # convert an image from one colour space to another(from rgb to gray)
     img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_rgb_resized = cv2.resize(img_rgb, (240, 160), interpolation=cv2.INTER_CUBIC)
+    img_rgb_resized = cv2.resize(img_rgb, (3, 240, 160), interpolation=cv2.INTER_CUBIC)
     # make all pixels black
     # img_rgb_resized[img_rgb_resized < 255] = 0
     # make pixel values between 0 and 1
@@ -95,6 +95,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # state = T.tensor([obs], dtype=T.float)
             # input_img = env.render(mode='rgb_array').transpose((2, 0, 1))
             input_img = get_image(env)
+            input_img = input_img.transpose((2,0,1))
             # print("input img worker render", input_img.shape)
             state = T.tensor([input_img], dtype=T.float)
             # print("state/input img shape in worker", state.shape)

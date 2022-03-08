@@ -131,6 +131,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                 if icm:
                     intrinsic_reward, L_I, L_F = \
                         local_icm.calc_loss(states, new_states, actions)
+                    print(local_icm.calc_loss(states, new_states, actions))
+
                 # loss according to our a3c agent
                 loss = local_agent.calc_loss(obs, hx, done, rewards, values,
                                              log_probs, intrinsic_reward)

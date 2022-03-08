@@ -23,8 +23,8 @@ class Encoder(nn.Module):
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize
-
+        # self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize
+        self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize
 
     def forward(self, img):
         # print("expected input", img.shape)

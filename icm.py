@@ -29,7 +29,7 @@ class Encoder(nn.Module):
 
     def forward(self, img):
         # print("expected input", img.shape)
-        print(img)
+        # print(img)
         enc = self.conv1(img)
         # print(img.shape)
         enc = self.conv2(enc)
@@ -81,6 +81,7 @@ class ICM(nn.Module):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
         state = self.encoder(obs)
+        print(state)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 

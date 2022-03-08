@@ -23,7 +23,7 @@ class Encoder(nn.Module):
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape for CartPole-v0 after resize
+        self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize
 
 
     def forward(self, img):
@@ -34,7 +34,7 @@ class Encoder(nn.Module):
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
-        # print('put this shape into the fc1 layer: ', enc_flatten.size())
+        print('put this shape into the fc1 layer: ', enc_flatten.size())
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features

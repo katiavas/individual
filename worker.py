@@ -93,11 +93,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         while not done:
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
-            input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
+            # input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
             # input_img = input_img.transpose((0, 1, 2))
             # input_img = get_image(env)
             # print("input img worker render", input_img.shape)
-            # input_img = resize(input_img, (3, 84, 84)) # Resize for cartPole
+            input_img = resize(input_img, (3, 84, 84)) # Resize for cartPole
             input_img = input_img.transpose((0, 1, 2))
 
             state = T.tensor([input_img], dtype=T.float)
@@ -118,7 +118,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             reward = 0  # turn off extrinsic rewards
             memory.remember(state, action, reward, obs_, value, log_prob)
             # obs = obs_
-            obs = state
+            obs = obs_
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

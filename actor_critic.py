@@ -23,8 +23,8 @@ class Encoder(nn.Module):
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize 240x160
-        # self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
+        # self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize 240x160
+        self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
 
     def forward(self, img):
         # print("expected input", img.shape)
@@ -116,7 +116,7 @@ class ActorCritic(nn.Module):
         dist = Categorical(probs)
         action = dist.sample()
         log_prob = dist.log_prob(action)
-
+        # return predicted action, value, log probability and hidden state
         return action.numpy()[0], v, log_prob, hx
 
     # Functions to handle the calculation of the loss

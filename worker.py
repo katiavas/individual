@@ -119,6 +119,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             memory.remember(state, action, reward, obs_, value, log_prob)
             # obs = obs_
             obs = T.tensor([obs_])
+            obs = obs.transpose((0, 1, 2))
             print(obs.shape)
             # shape of obs: (4,)
             # LEARNING

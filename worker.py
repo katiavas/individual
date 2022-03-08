@@ -99,7 +99,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # print("input img worker render", input_img.shape)
             input_img = resize(input_img, (3, 84, 84)) # Resize for b
             print(input_img.shape)
-            input_img = input_img.transpose((1, 2, 0))
+            input_img = input_img.transpose((0, 1, 0))
             print(input_img.shape)
 
             state = T.tensor([input_img], dtype=T.float)

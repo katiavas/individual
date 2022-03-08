@@ -109,12 +109,12 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # observation represents environments next state
             # take your action
             obs_, reward, done, info = env.step(action)
-            print(obs_.shape)
             # increment total steps, episode steps, increase your score
             t_steps += 1
             ep_steps += 1
             score += reward
             reward = 0  # turn off extrinsic rewards
+            print(obs.shape)
             memory.remember(obs, action, reward, obs_, value, log_prob)
             obs = obs_
             obs = resize(obs, (3, 84, 84))
@@ -122,7 +122,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             obs = obs.transpose((0, 1, 2))
             # print(obs.shape)
             obs = T.tensor([obs], dtype=T.float)
-            print(obs.shape)
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

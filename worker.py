@@ -93,6 +93,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         while not done:
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
+            print(type(input_img))
             # input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
             # input_img = input_img.transpose((0, 1, 2))
             # input_img = get_image(env)

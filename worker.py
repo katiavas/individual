@@ -93,7 +93,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         while not done:
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
-            print(type(input_img))
             # input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
             # input_img = input_img.transpose((0, 1, 2))
             # input_img = get_image(env)
@@ -109,17 +108,17 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # observation represents environments next state
             # take your action
             obs_, reward, done, info = env.step(action)
-            print(type(obs_))
             # increment total steps, episode steps, increase your score
             t_steps += 1
             ep_steps += 1
             score += reward
             reward = 0  # turn off extrinsic rewards
             memory.remember(state, action, reward, obs_, value, log_prob)
-            obs = state
-            # obs = obs_
-            # obs = obs.transpose((2, 0, 1))
-            # obs = T.tensor([obs], dtype=T.uint8)
+            # obs = state
+            obs = obs_
+            obs = obs.permute((2, 0, 1))
+            print(obs.shape)
+            obs = T.tensor([obs], dtype=T.float)
             #print(type(obs))
             # shape of obs: (4,)
             # LEARNING

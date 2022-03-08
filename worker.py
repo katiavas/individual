@@ -98,9 +98,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # input_img = get_image(env)
             # print("input img worker render", input_img.shape)
             input_img = resize(input_img, (3, 84, 84)) # Resize for b
-            print(input_img.shape)
             input_img = input_img.transpose((0, 1, 2))
-            print(input_img.shape)
 
             state = T.tensor([input_img], dtype=T.float)
             # print("state/input img shape in worker", state.shape)
@@ -121,6 +119,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             memory.remember(state, action, reward, obs_, value, log_prob)
             # obs = obs_
             obs = T.tensor([obs_])
+            print(obs.shape)
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

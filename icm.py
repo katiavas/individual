@@ -29,7 +29,7 @@ class Encoder(nn.Module):
 
     def forward(self, img):
         # print("expected input", img.shape)
-        # print(img)
+        print(img)
         enc = self.conv1(img)
         # print(img.shape)
         enc = self.conv2(enc)

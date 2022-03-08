@@ -178,5 +178,4 @@ class ActorCritic(nn.Module):
         critic_loss = F.mse_loss(values[:-1].squeeze(), returns)  # mean squared error
         total_loss = actor_loss + critic_loss - 0.01*entropy_loss
 
-        # total_loss = 0*actor_loss + 0*critic_loss - 0.01*entropy_loss*0
         return total_loss

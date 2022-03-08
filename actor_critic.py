@@ -7,7 +7,7 @@ from torch.distributions import Categorical
 '''Convolutional features are just that, they're convolutions, maybe max-pooled convolutions, but they aren't flat. 
 We need to flatten them, like we need to flatten an image before passing it through a regular layer'''
 
-
+# This is for Breakout-v5 resize 84x84 image
 # 2 convolutional layers to extract features from the images
 class Encoder(nn.Module):
 

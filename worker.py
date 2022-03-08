@@ -117,10 +117,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             score += reward
             reward = 0  # turn off extrinsic rewards
             memory.remember(state, action, reward, obs_, value, log_prob)
-            # obs = obs_
-            obs = T.tensor([obs_])
+            obs = obs_
             obs = obs.transpose((0, 1, 2))
+            obs = T.tensor([obs])
             print(obs.shape)
+            # print(obs.shape)
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

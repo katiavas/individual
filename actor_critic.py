@@ -103,9 +103,9 @@ class ActorCritic(nn.Module):
     # It will take a state/image and a hidden state for our GRU as an input
 #    def forward(self, state, hx):
     def forward(self, img, hx):
-        print("actor critic forward image", img.shape)
+        # print("actor critic forward image", img.shape)
         state = self.encoder(img)
-        print("Forward model state/img shape", state.shape)
+        # print("Forward model state/img shape", state.shape)
         x = F.relu(self.input(state))
         x = F.relu(self.dense(x))
         hx = self.gru(x, hx)

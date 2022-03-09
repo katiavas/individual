@@ -84,9 +84,9 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
-        # obs = env.reset()
-        obs = T.tensor([env.reset()], dtype=T.float)
-        print("obs worker", type(obs))
+        obs = env.reset()
+        print("obs worker", obs.dtype())
+        obs = T.tensor([obs], dtype=T.float)
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode

@@ -51,18 +51,18 @@ This is a cross entropy loss between the predicted action and the actual action 
 
 # Cartpole n_actions = 2, input_dims = 4
 class ICM(nn.Module):
-    def __init__(self, input_dims, n_actions=2, alpha=1, beta=0.2):
+    def __init__(self, feature_dim=64, n_actions=2, alpha=1, beta=0.2):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
-        self.encoder = Encoder(feature_dim=64)
+        self.encoder = Encoder(feature_dim)
 
         # hard coded for cartPole environment
-        self.inverse = nn.Linear(4 * 2, 256)
+        self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
-        self.dense1 = nn.Linear(4 + 1, 256)
-        self.new_state = nn.Linear(256, 4)
+        self.dense1 = nn.Linear(feature_dim + 1, 256)
+        self.new_state = nn.Linear(256, feature_dim)
 
         '''if T.cuda.is_available():
             device = T.device("cuda:0")

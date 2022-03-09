@@ -119,7 +119,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             obs = resize(obs, (3, 84, 84))
             obs = obs.transpose((0, 1, 2))
             obs = T.tensor([obs], dtype=T.float)
-            print(obs)
+            print("obs", obs)
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

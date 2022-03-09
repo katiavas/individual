@@ -58,7 +58,7 @@ class ICM(nn.Module):
         self.encoder = Encoder(feature_dim=64)
 
         # hard coded for cartPole environment
-        self.inverse = nn.Linear(feature_dim * 2, 256)
+        self.inverse = nn.Linear(1 * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
         self.dense1 = nn.Linear(feature_dim + 1, 256)

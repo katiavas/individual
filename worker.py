@@ -84,8 +84,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
-        obs = env.reset()
-        obs = T.tensor([obs], dtype=T.float)
+        # obs = env.reset()
+        obs = T.tensor([env.reset()], dtype=T.float)
         print("obs worker", type(obs))
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
@@ -99,7 +99,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # input_img = input_img.transpose((0, 1, 2))
             # input_img = get_image(env)
             # print("input img worker render", input_img.shape)
-            input_img = resize(input_img, (3, 84, 84)) # Resize for b
+            input_img = resize(input_img, (3, 84, 84)) # Resize for breakout
             # input_img = input_img.transpose((2, 0, 1))
             input_img = input_img.transpose((0, 1, 2))
             state = T.tensor([input_img], dtype=T.float)

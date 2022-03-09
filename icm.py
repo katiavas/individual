@@ -28,7 +28,7 @@ class Encoder(nn.Module):
         self.fc1 = nn.Linear(225792, feature_dim)
 
     def forward(self, img):
-        print("expected input", img)
+        # print("expected input", img)
         # print(img)
         enc = self.conv1(img)
         # print(img.shape)
@@ -40,7 +40,7 @@ class Encoder(nn.Module):
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
-#
+
 
 '''In the inverse model you want to predict the action the agent took to cause this state to transition from time t to t+1
 So you are comparing an integer vs an actual label/ the actual action the agent took

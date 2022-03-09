@@ -13,13 +13,13 @@ if __name__ == '__main__':
     torch.manual_seed(5)
     mp.set_start_method('spawn')
     memory = Memory()
-    env_id = 'ALE/Breakout-v5'
-    # env_id = 'CartPole-v1'
+    # env_id = 'ALE/Breakout-v5'
+    env_id = 'CartPole-v1'
     n_threads = 2
-    n_actions = 4
-    # n_actions = 2
+    # n_actions = 4
+    n_actions = 2
     # print(input_shape)
-    input_shape = [6]
+    input_shape = [4]
     env = ParallelEnv(env_id=env_id, n_threads=n_threads,
                       n_actions=n_actions, input_shape=input_shape, icm=True)
                       

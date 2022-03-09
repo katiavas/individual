@@ -91,16 +91,16 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode
         # every 20 steps in an episode we want to execute the learning function
+        # input_img = input_img.transpose((2, 0, 1))
         score, done, ep_steps = 0, False, 0
         while not done:
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
-            # input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
-            # input_img = input_img.transpose((0, 1, 2))
-            # print("input img worker render", input_img.shape)
-            input_img = resize(input_img, (3, 84, 84)) # Resize for breakout
-            # input_img = input_img.transpose((2, 0, 1))
+            input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
             input_img = input_img.transpose((0, 1, 2))
+            # print("input img worker render", input_img.shape)
+            # input_img = resize(input_img, (3, 84, 84)) # Resize for breakout
+            # input_img = input_img.transpose((0, 1, 2))
             state = T.tensor([input_img], dtype=T.float)
             # feed forward our state and our hidden state to the local agent to get the action we want to take,
             # value for that state, log_prob for that action
@@ -114,13 +114,10 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             ep_steps += 1
             score += reward
             reward = 0  # turn off extrinsic rewards
-            # print("obs", obs)
             memory.remember(obs, action, reward, obs_, value, log_prob)
             obs = obs_
             obs = resize(obs, (3, 84, 84))
-            # print(obs.shape)
             obs = obs.transpose((0, 1, 2))
-            # print(obs.shape)
             obs = T.tensor([obs], dtype=T.float)
             # shape of obs: (4,)
             # LEARNING

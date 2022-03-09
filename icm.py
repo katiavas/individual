@@ -51,7 +51,7 @@ This is a cross entropy loss between the predicted action and the actual action 
 
 # Cartpole n_actions = 2, input_dims = 4
 class ICM(nn.Module):
-    def __init__(self, input_dims, n_actions=4, alpha=1, beta=0.2):
+    def __init__(self, input_dims, n_actions=2, alpha=1, beta=0.2):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta

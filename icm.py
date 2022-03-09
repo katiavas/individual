@@ -92,7 +92,7 @@ class ICM(nn.Module):
         # Forward model
         # from [T] to [T,1]
         action = action.reshape((action.size()[0], 1))
-        # print("action", action.shape())
+        print("action", action.shape())
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
         print(forward_input)

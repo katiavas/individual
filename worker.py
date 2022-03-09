@@ -111,7 +111,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # observation represents environments next state
             # take your action
             obs_, reward, done, info = env.step(action)
-            print(obs_)
             # increment total steps, episode steps, increase your score
             t_steps += 1
             ep_steps += 1
@@ -120,6 +119,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # print("obs", obs)
             memory.remember(obs, action, reward, obs_, value, log_prob)
             obs = obs_
+            print(obs)
             obs = resize(obs, (3, 84, 84))
             # print(obs.shape)
             obs = obs.transpose((0, 1, 2))

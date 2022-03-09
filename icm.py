@@ -94,7 +94,7 @@ class ICM(nn.Module):
         action = action.reshape((action.size()[0], 1))
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
-        print(forward_input)
+        # print(forward_input)
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
 

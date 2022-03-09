@@ -57,12 +57,11 @@ class ICM(nn.Module):
         self.beta = beta
         self.encoder = Encoder(feature_dim=64)
 
-        # hard coded for cartPole environment
         self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
         self.dense1 = nn.Linear(feature_dim + 1, 256)
-        self.new_state = nn.Linear(256, 1)
+        self.new_state = nn.Linear(256, feature_dim)
 
         device = T.device('cpu')
         self.to(device)
@@ -72,7 +71,7 @@ class ICM(nn.Module):
     def forward(self, obs, new_obs, action):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
-        print("icm forward observations", obs)
+        # print("icm forward observations", obs)
         state = self.encoder(obs)
         with T.no_grad():
             new_state = self.encoder(new_obs)
@@ -86,7 +85,6 @@ class ICM(nn.Module):
         action = action.reshape((action.size()[0], 1))
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
-        # print(forward_input)
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
 
@@ -96,7 +94,6 @@ class ICM(nn.Module):
         # state = T.tensor(state, dtype=T.float)
         action = T.tensor(action, dtype=T.float)
         new_state = T.tensor(new_state, dtype=T.float)
-        # print("new_state", new_state)
         # feed/pass state, new_state , action through our network
         pi_logits, state_ = self.forward(state, new_state, action)
         "Our inverse loss is a cross entropy loss because this will generally have more than two actions"

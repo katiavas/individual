@@ -85,6 +85,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     intr = []
     while episode < max_eps:
         obs = env.reset()
+        obs = T.tensor([obs], dtype=T.float)
         print("obs worker", type(obs))
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)

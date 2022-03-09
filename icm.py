@@ -56,12 +56,13 @@ class ICM(nn.Module):
         self.alpha = alpha
         self.beta = beta
         self.encoder = Encoder(feature_dim=64)
+        print(self.encoder)
 
         # hard coded for cartPole environment
         self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
-        self.dense1 = nn.Linear(1, 256)
+        self.dense1 = nn.Linear(feature_dim + 1, 256)
         self.new_state = nn.Linear(256, feature_dim)
 
         '''if T.cuda.is_available():
@@ -80,7 +81,7 @@ class ICM(nn.Module):
     def forward(self, obs, new_obs, action):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
-        print("icm forward observations", obs)
+        # print("icm forward observations", obs)
         state = self.encoder(obs)
         with T.no_grad():
             new_state = self.encoder(new_obs)

@@ -63,15 +63,7 @@ class ICM(nn.Module):
         self.pi_logits = nn.Linear(256, n_actions)
 
         self.dense1 = nn.Linear(feature_dim + 1, 256)
-        self.new_state = nn.Linear(256, feature_dim)
-
-        '''if T.cuda.is_available():
-            device = T.device("cuda:0")
-            print("Running on the GPU")
-        else :
-            device = T.device('cpu')
-            print("Running on the CPU")'''
-        # T.cuda.device_count()
+        self.new_state = nn.Linear(256, 1)
 
         device = T.device('cpu')
         self.to(device)

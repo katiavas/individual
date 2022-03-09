@@ -28,7 +28,7 @@ class Encoder(nn.Module):
         self.fc1 = nn.Linear(225792, feature_dim)
 
     def forward(self, img):
-        # print("expected input", img)
+        print("expected input", img)
         # print(img)
         enc = self.conv1(img)
         # print(img.shape)
@@ -80,7 +80,7 @@ class ICM(nn.Module):
     def forward(self, obs, new_obs, action):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
-        print("icm forward observations", obs)
+        # print("icm forward observations", obs)
         state = self.encoder(obs)
         with T.no_grad():
             new_state = self.encoder(new_obs)

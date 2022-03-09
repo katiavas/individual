@@ -95,9 +95,9 @@ class ICM(nn.Module):
         # print("action", action.shape())
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
+        print(forward_input)
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
-        print("icm state", state_)
 
         return pi_logits, state_
 

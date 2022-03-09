@@ -82,6 +82,7 @@ class ICM(nn.Module):
         "and activate it with an elu activation--> exponential linear"
         # print("icm forward observations", obs)
         state = self.encoder(obs)
+        print(state)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 
@@ -89,10 +90,10 @@ class ICM(nn.Module):
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)
 
+
         # Forward model
         # from [T] to [T,1]
         action = action.reshape((action.size()[0], 1))
-        print("action", action.shape())
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
         print(forward_input)

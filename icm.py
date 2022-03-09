@@ -104,7 +104,7 @@ class ICM(nn.Module):
         # state = T.tensor(state, dtype=T.float)
         action = T.tensor(action, dtype=T.float)
         new_state = T.tensor(new_state, dtype=T.float)
-        print("new_state", new_state)
+        # print("new_state", new_state)
         # feed/pass state, new_state , action through our network
         pi_logits, state_ = self.forward(state, new_state, action)
         "Our inverse loss is a cross entropy loss because this will generally have more than two actions"

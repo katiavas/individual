@@ -48,7 +48,7 @@ Multi-class classification problem
 This is a cross entropy loss between the predicted action and the actual action the agent took'''
 "The loss for the forward model is the mse between the predicted state at time t+1 and the actua state at time t+1  "
 "So we have two losses : one that comes from the inverse model and one that comes from the forward model "
-
+#
 # Cartpole n_actions = 2, input_dims = 4
 class ICM(nn.Module):
     def __init__(self, input_dims, n_actions=2, alpha=1, beta=0.2, feature_dim=64):

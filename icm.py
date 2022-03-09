@@ -82,14 +82,12 @@ class ICM(nn.Module):
         "and activate it with an elu activation--> exponential linear"
         # print("icm forward observations", obs)
         state = self.encoder(obs)
-        print(state)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)
-
 
         # Forward model
         # from [T] to [T,1]
@@ -106,6 +104,7 @@ class ICM(nn.Module):
         # state = T.tensor(state, dtype=T.float)
         action = T.tensor(action, dtype=T.float)
         new_state = T.tensor(new_state, dtype=T.float)
+        print("new_state", new_state)
         # feed/pass state, new_state , action through our network
         pi_logits, state_ = self.forward(state, new_state, action)
         "Our inverse loss is a cross entropy loss because this will generally have more than two actions"

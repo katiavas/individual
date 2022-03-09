@@ -28,7 +28,7 @@ class Encoder(nn.Module):
         self.fc1 = nn.Linear(225792, feature_dim)
 
     def forward(self, img):
-        print("expected input", img)
+        # print("expected input", img)
         # print(img)
         enc = self.conv1(img)
         # print(img.shape)

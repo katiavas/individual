@@ -117,7 +117,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # print("obs", obs)
             memory.remember(obs, action, reward, obs_, value, log_prob)
             obs = obs_
-            print(obs)
             obs = resize(obs, (3, 84, 84))
             # print(obs.shape)
             obs = obs.transpose((0, 1, 2))

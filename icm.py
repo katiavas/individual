@@ -40,7 +40,7 @@ class Encoder(nn.Module):
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
-
+#
 
 '''In the inverse model you want to predict the action the agent took to cause this state to transition from time t to t+1
 So you are comparing an integer vs an actual label/ the actual action the agent took

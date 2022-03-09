@@ -85,7 +85,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     intr = []
     while episode < max_eps:
         obs = env.reset()
-        print(obs)
+        print(obs.shape)
         # make your hidden state for the actor critic a3c
         hx = T.zeros(1, 256)
         # we need a score, a terminal flag and the number of steps taken withing the episode

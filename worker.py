@@ -7,10 +7,10 @@ from memory import Memory
 from utils import plot_learning_curve
 # from utils import plot_intrinsic_reward
 import torch as T
-from workers import make_env
 import cv2
 # from utils import plot_learning_curve_with_shaded_error
 import matplotlib.pyplot as plt
+from workers import make_env
 
 from skimage.transform import resize
 
@@ -44,11 +44,28 @@ def prepare_initial_state(state, N=3):
 " Error even when I have transposed the array "
 
 
+def get_image(env):
+    img = env.render(mode='rgb_array')
+    print(img.shape)
+    # convert an image from one colour space to another(from rgb to gray)
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    img_rgb_resized = cv2.resize(img_rgb, (240, 160), interpolation=cv2.INTER_CUBIC)
+    # make all pixels black
+    # img_rgb_resized[img_rgb_resized < 255] = 0
+    # make pixel values between 0 and 1
+    img_rgb_resized = img_rgb_resized / 255
+    return img_rgb_resized
 
 
-def worker(name, input_shape, n_actions, global_agent,
-           optimizer, env_id, n_threads, global_idx, global_icm,
-           icm_optimizer, icm):
+def get_screen(env):
+    screen = env.render(mode='rgb_array').transpose((2, 0, 1))
+    screen = np.ascontiguousarray(screen, dtype=np.float32) / 255
+    return T.from_numpy(screen)
+
+
+def worker(name, input_shape, n_actions, global_agent, global_icm,
+           optimizer, icm_optimizer, env_id, n_threads, icm=False):
+    T.manual_seed(5)
     T_MAX = 20
 
     local_agent = ActorCritic(input_shape, n_actions)
@@ -81,10 +98,10 @@ def worker(name, input_shape, n_actions, global_agent,
             t_steps += 1
             if ep_steps % T_MAX == 0 or done:
                 states, actions, new_states, rewards, values, log_probs = \
-                        memory.sample_memory()
+                    memory.sample_memory()
                 if icm:
                     intrinsic_reward, L_I, L_F = \
-                            local_icm.calc_loss(states, new_states, actions)
+                        local_icm.calc_loss(states, new_states, actions)
 
                 loss = local_agent.calc_cost(obs, hx, done, rewards,
                                              values, log_probs,
@@ -97,16 +114,16 @@ def worker(name, input_shape, n_actions, global_agent,
                 loss.backward()
                 T.nn.utils.clip_grad_norm_(local_agent.parameters(), 40)
                 for local_param, global_param in zip(
-                                        local_agent.parameters(),
-                                        global_agent.parameters()):
+                        local_agent.parameters(),
+                        global_agent.parameters()):
                     global_param._grad = local_param.grad
                 optimizer.step()
                 local_agent.load_state_dict(global_agent.state_dict())
 
                 if icm:
                     for local_param, global_param in zip(
-                                        local_icm.parameters(),
-                                        global_icm.parameters()):
+                            local_icm.parameters(),
+                            global_icm.parameters()):
                         global_param._grad = local_param.grad
                     icm_optimizer.step()
                     local_icm.load_state_dict(global_icm.state_dict())
@@ -118,12 +135,12 @@ def worker(name, input_shape, n_actions, global_agent,
         if name == '1':
             scores.append(score)
             avg_score = np.mean(scores[-100:])
-            avg_score_5000 = np.mean(scores[max(0, episode-5000): episode+1])
+            avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '
                   'avg score (100) (5000) {:.2f} {:.2f}'.format(
-                                                episode, name, n_threads,
-                                                t_steps/1e6, score,
-                                                avg_score, avg_score_5000))
+                episode, name, n_threads,
+                t_steps / 1e6, score,
+                avg_score, avg_score_5000))
     if name == '1':
         x = [z for z in range(episode)]
         plot_learning_curve(x, scores, 'ICM_hallway_final.png')

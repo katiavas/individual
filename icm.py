@@ -90,9 +90,7 @@ class ICM(nn.Module):
 
         state = state.view(state.size()[0], -1).to(T.float)
         new_state = new_state.view(new_state.size()[0], -1).to(T.float)
-        print(state,"new")
-
-        print(new_state.shape)
+        print(new_state.shape, "new")
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)

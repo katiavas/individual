@@ -79,18 +79,17 @@ class ICM(nn.Module):
     def forward(self, obs, new_obs, action):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
+        print(obs.shape)
         obs = T.Tensor(obs)
         # obs = obs.view(obs.size()[0], -1).to(T.float)
         # obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         # print("obs", obs.shape)
         state = self.encoder(obs)
-        print("state", state.shape)
+        # print("state", state.shape)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 
-        state = state.view(state.size()[0], -1).to(T.float)
-        new_state = new_state.view(new_state.size()[0], -1).to(T.float)
-        print(new_state.shape, "new")
+        # print(new_state.shape, "new")
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)

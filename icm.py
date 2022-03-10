@@ -103,7 +103,6 @@ class ICM(nn.Module):
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
         # print(state_.shape, "s")
-
         return new_state, pi_logits, state_
 
     def calc_loss(self, state, new_state, action):
@@ -124,3 +123,5 @@ class ICM(nn.Module):
         # dimension which is the number of states
         intrinsic_reward = self.alpha * ((state_ - phi_new).pow(2)).mean(dim=1)
         return intrinsic_reward, L_I, L_F
+
+""" I just discovered whats wrong, so now I was just wondering what I should do next  """

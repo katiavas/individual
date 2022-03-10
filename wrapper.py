@@ -2,10 +2,11 @@ import cv2
 import numpy as np
 import gym
 
+
 # https://alexandervandekleut.github.io/gym-wrappers/
 # Wrapper that helps modify/preprocess observations
 class InputImg(gym.ObservationWrapper):
-    def __init__(self, input_shape, env=None):
+    def __init__(self, input_shape, env):
         # call super constructor with the environment as an input
         super(InputImg, self).__init__(env)
         self.shape = (input_shape[2], input_shape[0], input_shape[1])
@@ -13,8 +14,7 @@ class InputImg(gym.ObservationWrapper):
         self.observation_space = gym.spaces.Box(low=0.0, high=1.0,
                                                 shape=self.shape,
                                                 dtype=np.float32)
-        print(self.observation_space)
-
+    # override the observation method of the environment
     def observation(self, obs):
         input_img = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
         img_resised = cv2.resize(input_img, self.shape[1:], interpolation=cv2.INTER_AREA)  # self.shape[1:] = 84,84

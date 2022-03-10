@@ -10,7 +10,7 @@ import torch as T
 import cv2
 # from utils import plot_learning_curve_with_shaded_error
 import matplotlib.pyplot as plt
-from workers import make_env
+from wrapper import make_env
 
 from skimage.transform import resize
 

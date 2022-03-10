@@ -12,6 +12,7 @@ class PreprocessFrame(gym.ObservationWrapper):
                                                 dtype=np.float32)
         print(self.observation_space)
 
+    # self.shape[1:] = 84,84
     def observation(self, obs):
         new_frame = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
         resized_screen = cv2.resize(new_frame, self.shape[1:],

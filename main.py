@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # print(input_shape)
     input_shape = [3, 84, 84]
     env = ParallelEnv(env_id=env_id, n_threads=n_threads,
-                      n_actions=n_actions, input_shape=input_shape, icm=False)
+                      n_actions=n_actions, input_shape=input_shape, icm=True)
                       
                       
 # CartPole ++> n_actions = 2 , input_shape/input_dims = 4

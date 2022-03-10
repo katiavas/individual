@@ -41,7 +41,7 @@ class PreprocessFrame(gym.ObservationWrapper):
         return new_obs
 
 
-def make_env(env_name, shape=(84, 84, 3)):
+def make_env(env_name, shape=(84, 84, 1)):
     env = gym.make(env_name)
     env = PreprocessFrame(shape, env)
     return env

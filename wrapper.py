@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import gym
 
+# https://alexandervandekleut.github.io/gym-wrappers/
 # Wrapper that helps modify/preprocess observations
 class InputImg(gym.ObservationWrapper):
     def __init__(self, input_shape, env=None):

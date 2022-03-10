@@ -88,9 +88,10 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         intrinsic_reward = None
 
     memory = Memory()
+    env = gym.make(env_id)
 
-    img_shape = [input_shape[1], input_shape[2], 1]
-    env = make_env(env_id, shape = img_shape)
+    # img_shape = [input_shape[1], input_shape[2], 1]
+    # env = make_env(env_id, shape = img_shape)
 
     episode, max_steps, t_steps, scores = 0, 1000, 0, []
 
@@ -99,7 +100,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         score, done, ep_steps = 0, False, 0
         hx = T.zeros(1, 256)
         while not done:
-            state = T.tensor([obs], dtype=T.float)
+            input_img = env.render(mode='rgb_array')
+            input_img = resize(input_img, (1, 84, 84)) # Resize for breakout
+            input_img = input_img.transpose((0, 1, 2))
+            state = T.tensor([input_img], dtype=T.float)
+            # state = T.tensor([obs], dtype=T.float)
             action, value, log_prob, hx = local_agent(state, hx)
             obs_, reward, done, info = env.step(action)
             memory.remember(obs, action, obs_, reward, value, log_prob)

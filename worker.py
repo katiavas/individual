@@ -90,7 +90,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     memory = Memory()
 
     img_shape = [input_shape[1], input_shape[2], 1]
-    env = make_env(env_id, shape=img_shape)
+    env = make_env(env_id, shape = img_shape)
 
     episode, max_steps, t_steps, scores = 0, 1000, 0, []
 

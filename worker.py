@@ -49,7 +49,7 @@ def get_image(env):
     print(img.shape)
     # convert an image from one colour space to another(from rgb to gray)
     img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_rgb_resized = cv2.resize(img_rgb, (240, 160), interpolation=cv2.INTER_CUBIC)
+    img_rgb_resized = cv2.resize(img_rgb, (84, 84), interpolation=cv2.INTER_CUBIC)
     # make all pixels black
     # img_rgb_resized[img_rgb_resized < 255] = 0
     # make pixel values between 0 and 1
@@ -77,9 +77,9 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         intrinsic_reward = None
 
     memory = Memory()
-
-    frame_buffer = [input_shape[1], input_shape[2], 1]
-    env = make_env(env_id, shape=frame_buffer)
+    img_shape = input_shape.transpose(0,1,2)
+    #img_shape = [input_shape[1], input_shape[2], 1]
+    env = make_env(env_id, shape=img_shape)
 
     episode, max_steps, t_steps, scores = 0, 1000, 0, []
 

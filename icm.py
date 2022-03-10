@@ -21,13 +21,12 @@ class Encoder(nn.Module):
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
         self.conv1 = nn.Conv2d(3, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
-        img_shape = self.conv_output(input_dims)
-        # print(self.conv1)
+        shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
-        # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v5
-        self.fc1 = nn.Linear(img_shape, feature_dim)  # shape for CartPole-v0 after resize
-        # self.fc1 = nn.Linear(225792, feature_dim)
+        # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
+        self.fc1 = nn.Linear(shape, feature_dim)  # shape after resize 240x160
+        # self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
 
     def conv_output(self, input_dims):
         state = T.zeros(1, *input_dims)
@@ -37,12 +36,13 @@ class Encoder(nn.Module):
 
     def forward(self, img):
         enc = self.conv1(img)
-        # print(img.shape)
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
-        enc_flatten = enc.flatten(start_dim=1)
+        # enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
+        # Bc fc1 needs a linear input
+        enc_flatten = enc.view(enc.size()[0], -1)
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
@@ -62,7 +62,7 @@ class ICM(nn.Module):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
-        self.encoder = Encoder(feature_dim=64)
+        self.encoder = Encoder(input_dims, feature_dim=64)
 
         self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)

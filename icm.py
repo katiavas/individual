@@ -102,7 +102,7 @@ class ICM(nn.Module):
         forward_input = T.cat([state, action], dim=1)
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
-        print(state_, "s")
+        print(state_.shape, "s")
 
         return pi_logits, state_
 

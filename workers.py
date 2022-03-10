@@ -3,7 +3,7 @@ import numpy as np
 import gym
 
 
-class PreprocessFrame(gym.ObservationWrapper):
+class PreprocessFrame:
     def __init__(self, shape, env=None):
         super(PreprocessFrame, self).__init__(env)
         self.shape = (shape[2], shape[0], shape[1])
@@ -24,5 +24,4 @@ class PreprocessFrame(gym.ObservationWrapper):
 def make_env(env_name, shape=(84, 84, 1)):
     env = gym.make(env_name)
     env = PreprocessFrame(shape, env)
-    print(env.shape, "shape env")
     return env

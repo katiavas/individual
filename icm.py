@@ -43,6 +43,7 @@ class Encoder(nn.Module):
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
         # Bc fc1 needs a linear input
         enc_flatten = enc.view(enc.size()[0], -1)
+        print(enc_flatten)
         features = self.fc1(enc_flatten)
         print("features", features.shape)
         return features
@@ -63,7 +64,7 @@ class ICM(nn.Module):
         self.alpha = alpha
         self.beta = beta
         self.encoder = Encoder(input_dims, feature_dim=64)
-
+        print("Features", self.encoder)
         self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
@@ -79,7 +80,6 @@ class ICM(nn.Module):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
         print("icm forward observations", obs)
-        new_obs = T.tensor(new_obs, dtype= T.double)
         state = self.encoder(obs)
         with T.no_grad():
             new_state = self.encoder(new_obs)

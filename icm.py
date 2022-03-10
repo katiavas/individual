@@ -85,12 +85,12 @@ class ICM(nn.Module):
         # obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         # print("obs", obs.shape)
         state = self.encoder(obs)
-        print("state", state.shape)
+        print("state", state.size)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 
 
-        print(new_state.shape, "new")
+        # print(new_state.shape, "new")
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)

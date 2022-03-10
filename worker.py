@@ -57,6 +57,18 @@ def get_image(env):
     return img_rgb_resized
 
 
+def get_img(env, input_shape):
+    obs = env.render(mode='rgb_array')
+    new_frame = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
+    resized_screen = cv2.resize(new_frame, input_shape[1:],
+                                interpolation=cv2.INTER_AREA)
+    # self.shape will be either 1 for grayscale or 3 for coloured image
+    new_obs = np.array(resized_screen, dtype=np.uint8).reshape(input_shape)
+    # make pixel values between 0 and 1
+    new_obs = new_obs / 255.0
+    return new_obs
+
+
 def get_screen(env):
     screen = env.render(mode='rgb_array').transpose((2, 0, 1))
     screen = np.ascontiguousarray(screen, dtype=np.float32) / 255
@@ -77,9 +89,10 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         intrinsic_reward = None
 
     memory = Memory()
-    img_shape = input_shape.transpose(0,1,2)
-    #img_shape = [input_shape[1], input_shape[2], 1]
-    env = make_env(env_id, shape=img_shape)
+
+    # img_shape = [input_shape[1], input_shape[2], 1]
+    # env = make_env(env_id, shape=img_shape)
+    env = gym.make(env_id)
 
     episode, max_steps, t_steps, scores = 0, 1000, 0, []
 
@@ -88,6 +101,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         score, done, ep_steps = 0, False, 0
         hx = T.zeros(1, 256)
         while not done:
+            obs = get_img(env, input_shape)
             state = T.tensor([obs], dtype=T.float)
             action, value, log_prob, hx = local_agent(state, hx)
             obs_, reward, done, info = env.step(action)

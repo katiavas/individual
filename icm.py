@@ -44,7 +44,7 @@ class Encoder(nn.Module):
         # Bc fc1 needs a linear input
         enc_flatten = enc.view(enc.size()[0], -1)
         features = self.fc1(enc_flatten)
-        # print("features", features.shape)
+        print("features", features.shape)
         return features
 
 
@@ -85,7 +85,7 @@ class ICM(nn.Module):
 
         state = state.view(state.size()[0], -1).to(T.float)
         new_state = new_state.view(new_state.size()[0], -1).to(T.float)
-
+        print(state.shape)
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)

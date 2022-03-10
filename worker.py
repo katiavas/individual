@@ -104,7 +104,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             input_img = resize(input_img, (1, 84, 84)) # Resize for breakout
             input_img = input_img.transpose((0, 1, 2))
             state = T.tensor([input_img], dtype=T.float)
-            print(state.shape)
+            # print(state.shape)
             # state = T.tensor([obs], dtype=T.float)
             action, value, log_prob, hx = local_agent(state, hx)
             obs_, reward, done, info = env.step(action)

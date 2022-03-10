@@ -80,6 +80,7 @@ class ICM(nn.Module):
         "and activate it with an elu activation--> exponential linear"
         print("icm forward observations", obs)
         obs = T.tensor(obs, dtype= T.double)
+        new_obs = T.tensor(new_obs, dtype= T.double)
         state = self.encoder(obs)
         with T.no_grad():
             new_state = self.encoder(new_obs)

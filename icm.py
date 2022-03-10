@@ -64,7 +64,7 @@ class ICM(nn.Module):
         self.alpha = alpha
         self.beta = beta
         self.encoder = Encoder(input_dims, feature_dim=64)
-        print("Features", self.encoder)
+        # print("Features", self.encoder)
         self.inverse = nn.Linear(feature_dim * 2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 

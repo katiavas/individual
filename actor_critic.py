@@ -108,7 +108,7 @@ class ActorCritic(nn.Module):
     def forward(self, img, hx):
         # print("actor critic forward image", img)
         state = self.encoder(img)
-        # print("Forward model state/img shape", state.shape)
+        print("Forward model state/img shape", state.shape)
         x = F.relu(self.input(state))
         x = F.relu(self.dense(x))
         hx = self.gru(x, hx)

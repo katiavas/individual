@@ -84,7 +84,7 @@ class ICM(nn.Module):
         # obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         # print("obs", obs.shape)
         state = self.encoder(obs)
-        # print("state", state.shape)
+        print("state", state.shape)
         with T.no_grad():
             new_state = self.encoder(new_obs)
 

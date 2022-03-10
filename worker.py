@@ -111,6 +111,9 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             memory.remember(obs, action, obs_, reward, value, log_prob)
             score += reward
             obs = obs_
+            obs = resize(obs, (1, 84, 84))
+            obs = obs.transpose((0, 1, 2))
+            obs = T.tensor([obs], dtype=T.float)
             ep_steps += 1
             t_steps += 1
             if ep_steps % T_MAX == 0 or done:

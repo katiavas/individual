@@ -85,15 +85,12 @@ class ICM(nn.Module):
         # obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         # print("obs", obs.shape)
         state = self.encoder(obs)
-        print("state", state.size()[0])
         with T.no_grad():
             new_state = self.encoder(new_obs)
 
-        state = state.view(state.size()[0], -1).to(T.float)
-        new_state = new_state.view(new_state.size()[0], -1).to(T.float)
-
-
-        print(new_state.shape, "new")
+        state = state.view(state.size()[0], 84).to(T.float)
+        new_state = new_state.view(new_state.size()[0], 84).to(T.float)
+        # print(new_state.shape, "new")
         # Create inverse layer
         inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
         pi_logits = self.pi_logits(inverse)
@@ -105,6 +102,7 @@ class ICM(nn.Module):
         forward_input = T.cat([state, action], dim=1)
         dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
+        print(state_, "s")
 
         return pi_logits, state_
 

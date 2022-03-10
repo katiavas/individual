@@ -11,17 +11,18 @@ os.environ['OMP_NUM_THREADS'] = '1'
 if __name__ == '__main__':
     # Set seed
     torch.manual_seed(5)
+    # mp.set_start_method('forkserver')
     mp.set_start_method('spawn')
     memory = Memory()
-    # env_id = 'ALE/Breakout-v5'
-    env_id = 'CartPole-v1'
+    env_id = 'ALE/Breakout-v5'
+    # env_id = 'CartPole-v1'
     n_threads = 2
-    # n_actions = 4
-    n_actions = 2
+    n_actions = 4
+    # n_actions = 2
     # print(input_shape)
-    input_shape = [4]
+    input_shape = [3, 84, 84]
     env = ParallelEnv(env_id=env_id, n_threads=n_threads,
-                      n_actions=n_actions, input_shape=input_shape, icm=True)
+                      n_actions=n_actions, input_shape=input_shape, icm=False)
                       
                       
 # CartPole ++> n_actions = 2 , input_shape/input_dims = 4

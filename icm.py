@@ -1,6 +1,7 @@
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
 
 
 # CartPole ++> n_actions = 2 , input_shape/input_dims = 4
@@ -12,7 +13,7 @@ import torch.nn.functional as F
 
 class Encoder(nn.Module):
 
-    def __init__(self, feature_dim=64):
+    def __init__(self, input_dims, feature_dim=64):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
@@ -20,16 +21,21 @@ class Encoder(nn.Module):
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
         self.conv1 = nn.Conv2d(3, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
+        img_shape = self.conv_output(input_dims)
         # print(self.conv1)
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v5
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape for CartPole-v0 after resize
+        self.fc1 = nn.Linear(img_shape, feature_dim)  # shape for CartPole-v0 after resize
         # self.fc1 = nn.Linear(225792, feature_dim)
 
+    def conv_output(self, input_dims):
+        state = T.zeros(1, *input_dims)
+        dims = self.conv1(state)
+        dims = self.conv2(dims)
+        return int(np.prod(dims.size()))
+
     def forward(self, img):
-        print("expected input", img)
-        # print(img)
         enc = self.conv1(img)
         # print(img.shape)
         enc = self.conv2(enc)

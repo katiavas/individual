@@ -84,6 +84,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     # We have 1000 episodes/ time steps
     intr = []
     while episode < max_eps:
+        # at the top of every episode reset the environment
         obs = env.reset()
         obs = T.tensor([obs], dtype=T.float)
         # print("obs worker", obs.dtype())
@@ -96,18 +97,18 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         while not done:
             # state = T.tensor([obs], dtype=T.float)
             input_img = env.render(mode='rgb_array')
-            input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
-            input_img = input_img.transpose((0, 1, 2))
+            # input_img = resize(input_img, (3, 240, 160)) # Resize for cartPole
+            # input_img = input_img.transpose((0, 1, 2)) # numpy expects images to be first and channels last so we have to transpose?
             # print("input img worker render", input_img.shape)
-            # input_img = resize(input_img, (3, 84, 84)) # Resize for breakout
-            # input_img = input_img.transpose((0, 1, 2))
+            input_img = resize(input_img, (3, 84, 84)) # Resize for breakout
+            input_img = input_img.transpose((0, 1, 2))
             state = T.tensor([input_img], dtype=T.float)
             # feed forward our state and our hidden state to the local agent to get the action we want to take,
             # value for that state, log_prob for that action
             action, value, log_prob, hx = local_agent(state, hx)
             # shape of input_img: (400,600,3) ... after resize:(240,160,3)
             # observation represents environments next state
-            # take your action
+            # take your action for each step of the episode
             obs_, reward, done, info = env.step(action)
             # increment total steps, episode steps, increase your score
             t_steps += 1
@@ -119,7 +120,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             obs = resize(obs, (3, 84, 84))
             obs = obs.transpose((0, 1, 2))
             obs = T.tensor([obs], dtype=T.float)
-            print("obs", obs)
+            # print("obs", obs)
             # shape of obs: (4,)
             # LEARNING
             # every 20 steps or when the game is done

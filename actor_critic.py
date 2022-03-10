@@ -11,7 +11,7 @@ We need to flatten them, like we need to flatten an image before passing it thro
 # 2 convolutional layers to extract features from the images
 class Encoder(nn.Module):
 
-    def __init__(self, feature_dim=64):
+    def __init__(self, input_dims, feature_dim=64):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
@@ -19,22 +19,27 @@ class Encoder(nn.Module):
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
         self.conv1 = nn.Conv2d(3, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
-        # print(self.conv1)
+        shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
         # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
-        self.fc1 = nn.Linear(1228800, feature_dim)  # shape after resize 240x160
+        self.fc1 = nn.Linear(shape, feature_dim)  # shape after resize 240x160
         # self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
 
+    def conv_output(self, input_dims):
+        state = T.zeros(1, *input_dims)
+        dims = self.conv1(state)
+        dims = self.conv2(dims)
+        return int(np.prod(dims.size()))
+
     def forward(self, img):
-        # print("expected input", img.shape)
         enc = self.conv1(img)
-        # print(img.shape)
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
-        enc_flatten = enc.flatten(start_dim=1)
+        # enc_flatten = enc.flatten(start_dim=1)
         # enc_flatten = T.flatten(enc, start_dim=1)
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
+        enc_flatten = enc.view(enc.size()[0], -1)
         features = self.fc1(enc_flatten)
         # print("features", features.shape)
         return features
@@ -51,7 +56,6 @@ class Encoder(nn.Module):
         self._to_linear = None
         self.convs(img)
         self.fc1 = nn.Linear(self._to_linear, feature_dim)
-
     # Number of Linear input connections depends on output of conv2d layers
     # and therefore the input image size, so compute it.
     def convs(self, img):
@@ -67,7 +71,6 @@ class Encoder(nn.Module):
             # print(self._to_linear)
         # print(img.shape)
         return img
-
     def forward(self, img):
         print("img shape in forward encoder before", img.shape)
         img = self.convs(img)
@@ -87,7 +90,7 @@ class ActorCritic(nn.Module):
         super(ActorCritic, self).__init__()
         self.gamma = gamma
         self.tau = tau
-        self.encoder = Encoder(feature_dim)
+        self.encoder = Encoder(input_dim, feature_dim)
         # Our network will need an input layer which will take an input and translate that into 256
         # self.input = nn.Linear(*input_dims, 256)
         self.input = nn.Linear(feature_dim, 256)
@@ -138,7 +141,7 @@ class ActorCritic(nn.Module):
             R = reward + self.gamma * R
             batch_return.append(R)
         batch_return.reverse()  # reverse it
-        batch_return = T.tensor(batch_return, 
+        batch_return = T.tensor(batch_return,
                                 dtype=T.float).reshape(values.size())
         return batch_return
 
@@ -180,3 +183,10 @@ class ActorCritic(nn.Module):
         total_loss = actor_loss + critic_loss - 0.01*entropy_loss
 
         return total_loss
+
+
+
+
+
+
+

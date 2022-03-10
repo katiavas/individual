@@ -31,6 +31,6 @@ class ParallelEnv:
                                     global_optim, global_icm_optim, env_id,
                                     n_threads, icm))
                    for name in names]
-
+        # start and join those threads
         [p.start() for p in self.ps]
         [p.join() for p in self.ps]

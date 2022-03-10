@@ -3,13 +3,14 @@ import numpy as np
 import gym
 
 
-class PreprocessFrame:
+class PreprocessFrame(gym.ObservationWrapper):
     def __init__(self, shape, env=None):
         super(PreprocessFrame, self).__init__(env)
         self.shape = (shape[2], shape[0], shape[1])
         self.observation_space = gym.spaces.Box(low=0.0, high=1.0,
                                                 shape=self.shape,
                                                 dtype=np.float32)
+        print(self.observation_space)
 
     def observation(self, obs):
         new_frame = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)

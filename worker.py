@@ -60,8 +60,7 @@ def get_image(env):
 def get_img(env, input_shape):
     obs = env.render(mode='rgb_array')
     new_frame = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
-    resized_screen = cv2.resize(new_frame, input_shape[1:],
-                                interpolation=cv2.INTER_AREA)
+    resized_screen = cv2.resize(new_frame, (84, 84), interpolation=cv2.INTER_AREA)
     # self.shape will be either 1 for grayscale or 3 for coloured image
     new_obs = np.array(resized_screen, dtype=np.uint8).reshape(input_shape)
     # make pixel values between 0 and 1

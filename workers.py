@@ -24,4 +24,5 @@ class PreprocessFrame(gym.ObservationWrapper):
 def make_env(env_name, shape=(84, 84, 1)):
     env = gym.make(env_name)
     env = PreprocessFrame(shape, env)
+    print(env.shape, "shape env")
     return env

@@ -104,23 +104,23 @@ class ICM(nn.Module):
         state_ = self.new_state(dense)
         print(state_.shape, "s")
 
-        return pi_logits, state_
+        return new_state, pi_logits, state_
 
     def calc_loss(self, state, new_state, action):
         state = T.tensor(state, dtype=T.float)
         action = T.tensor(action, dtype=T.float)
         new_state = T.tensor(new_state, dtype=T.float)
         # feed/pass state, new_state , action through our network
-        pi_logits, state_ = self.forward(state, new_state, action)
+        phi_new, pi_logits, state_ = self.forward(state, new_state, action)
         "Our inverse loss is a cross entropy loss because this will generally have more than two actions"
         inverse_loss = nn.CrossEntropyLoss()
         L_I = (1 - self.beta) * inverse_loss(pi_logits, action.to(T.long))
         "Forward loss is mse between predicted new state and actual new state"
         forward_loss = nn.MSELoss()
-        L_F = self.beta * forward_loss(state_, new_state)
+        L_F = self.beta * forward_loss(state_, phi_new)
         # dim=1 for mean(dim=1) is very important. If you take that out it will take the mean across all dimensions
         # and you just get a single number, which is not useful
         # because the curiosity reward is associated with each state, so you have to take the mean across that first
         # dimension which is the number of states
-        intrinsic_reward = self.alpha * ((state_ - new_state).pow(2)).mean(dim=1)
+        intrinsic_reward = self.alpha * ((state_ - phi_new).pow(2)).mean(dim=1)
         return intrinsic_reward, L_I, L_F

@@ -43,9 +43,9 @@ class Encoder(nn.Module):
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
         # Bc fc1 needs a linear input
         enc_flatten = enc.view(enc.size()[0], -1)
-        print(enc_flatten)
+        # print(enc_flatten)
         features = self.fc1(enc_flatten)
-        print("features", features.shape)
+        # print("features", features.shape)
         return features
 
 
@@ -80,7 +80,7 @@ class ICM(nn.Module):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
         obs = T.Tensor(obs)
-        #obs = obs.view(obs.size()[0], -1).to(T.float)
+        # obs = obs.view(obs.size()[0], -1).to(T.float)
         # new_obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         state = self.encoder(obs)
         with T.no_grad():

@@ -16,7 +16,7 @@ if __name__ == '__main__':
     memory = Memory()
     env_id = 'ALE/Breakout-v5'
     # env_id = 'CartPole-v1'
-    n_threads = 2
+    n_threads = 4
     n_actions = 4
     # n_actions = 2
     # print(input_shape)

@@ -17,34 +17,6 @@ from wrapper import make_env
 
 from skimage.transform import resize
 
-'''
-def downscale_obs(obs, new_size=(42, 42), to_gray=True):
-    if to_gray:
-        return resize(obs, new_size, anti_aliasing=True).max(axis=2)
-    else:
-        return resize(obs, new_size, anti_aliasing=True)
-
-
-def prepare_state(state):
-    return T.from_numpy(downscale_obs(state, to_gray=True)).float().unsqueeze(dim=0)
-
-
-def prepare_multi_state(state1, state2):
-    state1 = state1.clone()
-    tmp = T.from_numpy(downscale_obs(state2, to_gray=True)).float()
-    state1[0][0] = state1[0][1]
-    state1[0][1] = state1[0][2]
-    state1[0][2] = tmp
-    return state1
-
-
-def prepare_initial_state(state, N=3):
-    state_ = T.from_numpy(downscale_obs(state, to_gray=True)).float()
-    tmp = state_.repeat((N, 1, 1))
-    return tmp.unsqueeze(dim=0)
-'''
-"There is not an input shape anymore so we dont need it? For atari games "
-" Error even when I have transposed the array "
 
 
 def get_image(env):
@@ -97,7 +69,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     env = make_env(env_id, shape=img_shape)
 
     scores2 = []
-    episode, max_steps, t_steps, scores = 0, 1000, 0, []
+    episode, max_steps, t_steps, scores = 0, 5000, 0, []
     intr = []
     while episode < max_steps:
         obs = env.reset()
@@ -160,7 +132,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             a = T.sum(intrinsic_reward)
             intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
-            if episode< 1000:
+            if episode <= 1000:
                 scores2.append(score)
             avg_score = np.mean(scores[-100:])
             # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
@@ -172,9 +144,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     if name == '1':
         x = [z for z in range(episode)]
         print(x)
-        plot_learning_curve(x, scores, 'ICM_Final1.png')
-        plot_intrinsic_reward(x, intr, 'ICM_intrisic.png')
-        plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg.png')
+        plot_learning_curve(x, scores, 'ICM_Final2.png')
+        plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
         plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
         plot_learning_curve1(x, scores, scores2, 'Plot.plt')
 

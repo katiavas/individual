@@ -58,7 +58,7 @@ def plot_learning_curve_with_shaded_error(x, scores, figure_file):
     std = np.zeros(len(scores))
     for i in range(len(running_avg)):
         running_avg[i] = np.mean(scores[max(0, i-100):(i+1)])
-        std[i] = np.std(scores[max(0, i-100):(i+1)])
+        std[i] = np.std(np.mean(scores[max(0, i-100):(i+1)]))
         # running_avg[i] = scores[i]
 
     plt.plot(x, running_avg)

@@ -155,22 +155,22 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         # with global_idx.get_lock():
         #    global_idx.value += 1
         if name == '1':
-            a = T.sum(intrinsic_reward)
-            intr.append(a.detach().numpy())  # for plotting intrinsic reward
+            # a = T.sum(intrinsic_reward)
+            # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
             avg_score = np.mean(scores[-100:])
-            # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
+            avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '
-                  'avg score (100)  {:.2f}'.format(
+                  'avg score (100)(5000) {:.2f}{:.2f}'.format(
                 episode, name, n_threads,
                 t_steps / 1e6, score,
-                avg_score))
+                avg_score, avg_score_5000))
     if name == '1':
         x = [z for z in range(episode)]
-        plot_learning_curve(x, scores, 'ICM_hallway_final.png')
-        plot_intrinsic_reward(x, intr, 'ICM_intrisic.png')
-        plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg.png')
-        plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error.png')
+        plot_learning_curve(x, scores, 'A3C_final.png')
+        # plot_intrinsic_reward(x, intr, 'ICM_intrisic.png')
+        # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg.png')
+        plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_A3C.png')
 
 
 """Hi, I have just finished implementing the encoders for the icm and have output some graphs, plus some graphs for cartpole implementation. Since there is no available meeting for the next two weeks and we havent met for the last 2-3 weeks, I was wondering if you have time to do a quick meeting next week? After outputing those graphs, I dont know how to proceed and to be fair I am not entirely sure what I am actually looking for, eventhough I have done progress and have followed the papaer's implementation."""

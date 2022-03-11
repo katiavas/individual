@@ -167,6 +167,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                 avg_score, avg_score_5000))
     if name == '1':
         x = [z for z in range(episode)]
+        print(x)
         plot_learning_curve(x, scores, 'A3C_final.png')
         plot_intrinsic_reward(x, intr, 'ICM_intrisic.png')
         plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg.png')

@@ -8,6 +8,7 @@ from utils import plot_learning_curve
 from utils import plot_intrinsic_reward
 from utils import plot_intrinsic_reward_avg
 from utils import plot_learning_curve_with_shaded_error
+from utils import plot_learning_curve1
 import torch as T
 import cv2
 # from utils import plot_learning_curve_with_shaded_error
@@ -95,6 +96,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     img_shape = [input_shape[1], input_shape[2], 1]
     env = make_env(env_id, shape=img_shape)
 
+    scores2 = []
     episode, max_steps, t_steps, scores = 0, 1000, 0, []
     intr = []
     while episode < max_steps:
@@ -158,6 +160,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             a = T.sum(intrinsic_reward)
             intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
+            if episode< 1000:
+                scores2.append(score)
             avg_score = np.mean(scores[-100:])
             # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '
@@ -172,6 +176,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         plot_intrinsic_reward(x, intr, 'ICM_intrisic.png')
         plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg.png')
         plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
+        plot_learning_curve1(x, scores, scores2, 'Plot.plt')
 
 
 """Hi, I have just finished implementing the encoders for the icm and have output some graphs, plus some graphs for cartpole implementation. Since there is no available meeting for the next two weeks and we havent met for the last 2-3 weeks, I was wondering if you have time to do a quick meeting next week? After outputing those graphs, I dont know how to proceed and to be fair I am not entirely sure what I am actually looking for, eventhough I have done progress and have followed the papaer's implementation."""

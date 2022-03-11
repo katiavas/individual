@@ -1,4 +1,4 @@
-'''import torch as T
+import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
@@ -19,8 +19,9 @@ class Encoder(nn.Module):
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
         # 3 colour channels/rgb values
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
-        self.conv1 = nn.Conv2d(1, 32, (1, 1))  # 32 output channels, 1x1 kernel / window
-        self.conv2 = nn.Conv2d(32, 32, (1, 1))
+        self.conv1 = nn.Conv2d(input_dims[0], 32, 3, stride=2, padding=1)
+        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        # 32 output channels, 1x1 kernel / window
         shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
         self.fc1 = nn.Linear(shape, feature_dim)  # shape after resize 240x160
@@ -45,11 +46,11 @@ class Encoder(nn.Module):
         # output of our cnn/ feature representation
         return features
 
-
+'''
 In the inverse model you want to predict the action the agent took to cause this state to transition from time t to t+1
 So you are comparing an integer vs an actual label/ the actual action the agent took
 Multi-class classification problem
-This is a cross entropy loss between the predicted action and the actual action the agent took
+This is a cross entropy loss between the predicted action and the actual action the agent took'''
 "The loss for the forward model is the mse between the predicted state at time t+1 and the actua state at time t+1  "
 "So we have two losses : one that comes from the inverse model and one that comes from the forward model "
 
@@ -119,8 +120,8 @@ class ICM(nn.Module):
         # because the curiosity reward is associated with each state, so you have to take the mean across that first
         # dimension which is the number of states
         intrinsic_reward = self.alpha * ((state_ - new_state).pow(2)).mean(dim=1)
-        return intrinsic_reward, L_I, L_F'''
-
+        return intrinsic_reward, L_I, L_F
+'''
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
@@ -188,4 +189,4 @@ class ICM(nn.Module):
         L_F = self.beta * forward_loss(phi_hat_new, phi_new)
 
         intrinsic_reward = self.alpha*0.5*((phi_hat_new-phi_new).pow(2)).mean(dim=1)
-        return intrinsic_reward, L_I, L_F
+        return intrinsic_reward, L_I, L_F'''

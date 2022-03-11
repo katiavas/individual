@@ -1,11 +1,11 @@
-'''import numpy as np
+import numpy as np
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import Categorical
-
+'''
 Convolutional features are just that, they're convolutions, maybe max-pooled convolutions, but they aren't flat.
-We need to flatten them, like we need to flatten an image before passing it through a regular layer
+We need to flatten them, like we need to flatten an image before passing it through a regular layer'''
 
 # This is for Breakout-v5 resize 84x84 image
 # 2 convolutional layers to extract features from the images
@@ -17,8 +17,9 @@ class Encoder(nn.Module):
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
         # 3 colour channels/rgb values
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
-        self.conv1 = nn.Conv2d(1, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
-        self.conv2 = nn.Conv2d(32, 32, (1, 1))
+        self.conv1 = nn.Conv2d(input_dims[0], 32, 3, stride=2, padding=1)
+        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        # input is 3 images, 32 output channels, 1x1 kernel / window
         shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
         # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
@@ -149,11 +150,11 @@ class ActorCritic(nn.Module):
         critic_loss = F.mse_loss(values[:-1].squeeze(), returns)  # mean squared error
         total_loss = actor_loss + critic_loss - 0.01*entropy_loss
 
-        return total_loss'''
+        return total_loss
 
 
 
-
+'''
 
 import numpy as np
 import torch as T
@@ -258,4 +259,4 @@ class ActorCritic(nn.Module):
 
         total_loss = actor_loss + critic_loss - 0.01 * entropy_loss
         return total_loss
-
+'''

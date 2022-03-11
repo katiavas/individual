@@ -70,7 +70,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     env = make_env(env_id, shape=img_shape)
 
     scores2 = []
-    episode, max_steps, t_steps, scores = 0, 5000, 0, []
+    episode, max_steps, t_steps, scores = 0, 3000, 0, []
     intr = []
     while episode < max_steps:
         obs = env.reset()
@@ -148,7 +148,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                    scores,
                    delimiter=", ",
                    fmt='% s')
-        plot_learning_curve(x, scores, 'AC3_Final2.png')
+        plot_learning_curve(x, scores, 'AC3_Final3.png')
         # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
         # plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
         plot_learning_curve1(x, scores, scores2, 'Plot.plt')

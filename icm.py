@@ -82,9 +82,9 @@ class ICM(nn.Module):
         "and activate it with an elu activation--> exponential linear"
         obs = T.Tensor(obs)
         # Pass the obs and new obs through the cnn to get the state and new state
-        state = self.encoder.forward(obs)
+        state = self.encoder(obs)
         with T.no_grad():
-            new_state = self.encoder.forward(new_obs)
+            new_state = self.encoder(new_obs)
         # convert to feature size
         state = state.view(state.size()[0], -1).to(T.float)
         new_state = new_state.view(new_state.size()[0], -1).to(T.float)

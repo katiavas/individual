@@ -19,7 +19,7 @@ class Encoder(nn.Module):
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
         # 3 colour channels/rgb values
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
-        self.conv1 = nn.Conv2d(1, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
+        self.conv1 = nn.Conv2d(1, 32, (1, 1))  # 32 output channels, 1x1 kernel / window
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
         shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
@@ -78,9 +78,9 @@ class ICM(nn.Module):
         # obs = obs.view(obs.size()[0], -1).to(T.float)
         # obs = new_obs.view(new_obs.size()[0], -1).to(T.float)
         # print("obs", obs.shape)
-        state = self.encoder(obs)
+        state = self.encoder.forward(obs)
         with T.no_grad():
-            new_state = self.encoder(new_obs)
+            new_state = self.encoder.forward(new_obs)
 
         state = state.view(state.size()[0], -1).to(T.float)
         new_state = new_state.view(new_state.size()[0], -1).to(T.float)

@@ -19,13 +19,13 @@ class InputImg(gym.ObservationWrapper):
         input_img = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
         img_resised = cv2.resize(input_img, self.shape[1:], interpolation=cv2.INTER_AREA)  # self.shape[1:] = 84,84
         # self.shape will be either 1 for grayscale or 3 for coloured image
-        new_obs = np.array(img_resised, dtype=np.uint8).reshape((1, 84, 84))
+        new_obs = np.array(img_resised, dtype=np.uint8).reshape((1, 42, 42))
         # make pixel values between 0 and 1
         new_obs = new_obs / 255.0
         return new_obs
 
 
-def make_env(env_name, shape=(84, 84, 1)):
+def make_env(env_name, shape=(42, 42, 1)):
     env = gym.make(env_name)
     env = InputImg(shape, env)
     return env

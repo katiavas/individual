@@ -124,4 +124,3 @@ class ICM(nn.Module):
         intrinsic_reward = self.alpha * ((state_ - phi_new).pow(2)).mean(dim=1)
         return intrinsic_reward, L_I, L_F
 
-""" I just discovered whats wrong, so now I was just wondering what I should do next  """

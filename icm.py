@@ -13,7 +13,7 @@ import numpy as np
 
 class Encoder(nn.Module):
 
-    def __init__(self, input_dims, feature_dim=288):
+    def __init__(self, input_dims, feature_dim=64):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
@@ -38,8 +38,11 @@ class Encoder(nn.Module):
         # enc_flatten = enc.flatten(start_dim=1)
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
         # Bc fc1 needs a linear input
+        print(enc.shape, "enc")
         enc_flatten = enc.view(enc.size()[0], -1)
         features = self.fc1(enc_flatten)
+        print(features.shape, "features")
+        # output of our cnn/ feature representation
         return features
 
 
@@ -53,15 +56,18 @@ This is a cross entropy loss between the predicted action and the actual action 
 
 # Cartpole n_actions = 2, input_dims = 4
 class ICM(nn.Module):
-    def __init__(self, input_dims, n_actions=4, alpha=1, beta=0.2, feature_dim=288):
+    def __init__(self, input_dims, n_actions=4, alpha=0.1, beta=0.2, feature_dim=64):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
-        self.encoder = Encoder(input_dims)
+        self.encoder = Encoder(input_dims, feature_dim=64)
         # print("Features", self.encoder)
+        # INVERSE MODEL
+        # Given successive states, what action was taken? 2 because it takes 2 of our feature representations as inputs
         self.inverse = nn.Linear(feature_dim * 2, 256)
+        # Gonna give us the logits for our policy
         self.pi_logits = nn.Linear(256, n_actions)
-
+        # FORWARD MODEL
         self.dense1 = nn.Linear(feature_dim + 1, 256)
         self.new_state = nn.Linear(256, feature_dim)
 
@@ -74,6 +80,7 @@ class ICM(nn.Module):
         """ We have to concatenate a state and action and pass it through the inverse layer """
         "and activate it with an elu activation--> exponential linear"
         obs = T.Tensor(obs)
+        # Pass the obs and new obs through the cnn to get the state and new state
         state = self.encoder.forward(obs)
         with T.no_grad():
             new_state = self.encoder.forward(new_obs)
@@ -90,7 +97,7 @@ class ICM(nn.Module):
         action = action.reshape((action.size()[0], 1))
         # Activate the forward input and get a new state on the other end
         forward_input = T.cat([state, action], dim=1)
-        dense = self.dense1(forward_input)
+        dense = F.elu(self.dense1(forward_input))
         state_ = self.new_state(dense)
         # print(state_.shape, "s")
         return new_state, pi_logits, state_

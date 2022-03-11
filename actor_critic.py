@@ -125,7 +125,6 @@ class ActorCritic(nn.Module):
         # next_v = T.zeros(1, 1) if done else self.forward(new_states, hx)[1]
         next_v = T.zeros(1, 1) if done else self.forward(T.tensor([new_states], dtype=T.float), hx)[1]
 
-
         values.append(next_v.detach())
         values = T.cat(values).squeeze()  # concatenate -> cat
         log_probs = T.cat(log_probs)

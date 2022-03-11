@@ -130,8 +130,8 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         # with global_idx.get_lock():
         #    global_idx.value += 1
         if name == '1':
-            a = T.sum(intrinsic_reward)
-            intr.append(a.detach().numpy())  # for plotting intrinsic reward
+            # a = T.sum(intrinsic_reward)
+            # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
             if episode <= 1000:
                 scores2.append(score)
@@ -143,7 +143,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                 t_steps / 1e6, score,
                 avg_score))
     if name == '1':
-        #
         x = [z for z in range(episode)]
         np.savetxt("GFG.csv",
                    scores,

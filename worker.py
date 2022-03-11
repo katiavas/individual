@@ -95,7 +95,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     img_shape = [input_shape[1], input_shape[2], 1]
     env = make_env(env_id, shape=img_shape)
 
-    episode, max_steps, t_steps, scores = 0, 5000, 0, []
+    episode, max_steps, t_steps, scores = 0, 1000, 0, []
     intr = []
     while episode < max_steps:
         obs = env.reset()

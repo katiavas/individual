@@ -23,10 +23,7 @@ class Encoder(nn.Module):
         self.conv2 = nn.Conv2d(32, 32, (1, 1))
         shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
-        # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
-        # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
         self.fc1 = nn.Linear(shape, feature_dim)  # shape after resize 240x160
-        # self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
 
     def conv_output(self, input_dims):
         state = T.zeros(1, *input_dims)
@@ -39,13 +36,10 @@ class Encoder(nn.Module):
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         # enc_flatten = enc.flatten(start_dim=1)
-        # enc_flatten = T.flatten(enc, start_dim=1)
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
         # Bc fc1 needs a linear input
         enc_flatten = enc.view(enc.size()[0], -1)
-        # print(enc_flatten)
         features = self.fc1(enc_flatten)
-        # print("features", features.shape)
         return features
 
 

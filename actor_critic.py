@@ -196,7 +196,7 @@ class ActorCritic(nn.Module):
 
         conv_state = conv.view((conv.size()[0], -1))
 
-        hx = self.gru(conv_state, (hx))
+        hx = self.gru(conv_state, hx)
 
         pi = self.pi(hx)
         v = self.v(hx)

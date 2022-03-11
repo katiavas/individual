@@ -127,7 +127,7 @@ import torch.nn.functional as F
 
 
 class ICM(nn.Module):
-    def __init__(self, input_dims, n_actions=4, alpha=0.1, beta=0.2):
+    def __init__(self, input_dims, n_actions=3, alpha=0.1, beta=0.2):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
@@ -137,11 +137,11 @@ class ICM(nn.Module):
         self.conv3 = nn.Conv2d(32, 32, (1, 1))
         self.phi = nn.Conv2d(32, 32, (1, 1))
 
-        self.inverse = nn.Linear(64*2, 256)
+        self.inverse = nn.Linear(288*2, 256)
         self.pi_logits = nn.Linear(256, n_actions)
 
-        self.dense1 = nn.Linear(64+1, 256)
-        self.phi_hat_new = nn.Linear(256, 64)
+        self.dense1 = nn.Linear(288+1, 256)
+        self.phi_hat_new = nn.Linear(256, 288)
 
         device = T.device('cpu')
         self.to(device)

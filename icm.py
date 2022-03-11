@@ -41,10 +41,10 @@ class Encoder(nn.Module):
         # Bc fc1 needs a linear input
         # print(enc.shape, "enc")
         enc_flatten = enc.view(enc.size()[0], -1)
-        features = self.fc1(enc_flatten)
+        # features = self.fc1(enc_flatten)
         # print(features.shape, "features")
         # output of our cnn/ feature representation
-        return features
+        return enc_flatten
 
 '''
 In the inverse model you want to predict the action the agent took to cause this state to transition from time t to t+1
@@ -85,7 +85,7 @@ class ICM(nn.Module):
         state = self.encoder.forward(obs)
         with T.no_grad():
             new_state = self.encoder.forward(new_obs)
-
+        # convert to feature size
         # state = state.view(state.size()[0], -1).to(T.float)
         # new_state = new_state.view(new_state.size()[0], -1).to(T.float)
         # print(new_state.shape, "new")

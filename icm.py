@@ -39,7 +39,7 @@ class Encoder(nn.Module):
         # print('put this shape into the fc1 layer: ', enc_flatten.size())
         # Bc fc1 needs a linear input
         print(enc.shape, "enc")
-        enc_flatten = enc.view(enc.size()[0], -1)
+        enc_flatten = enc.view(1, -1)
         features = self.fc1(enc_flatten)
         print(features.shape, "features")
         # output of our cnn/ feature representation

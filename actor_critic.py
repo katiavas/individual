@@ -11,7 +11,7 @@ We need to flatten them, like we need to flatten an image before passing it thro
 # 2 convolutional layers to extract features from the images
 class Encoder(nn.Module):
 
-    def __init__(self, input_dims, feature_dim=64):
+    def __init__(self, input_dims, feature_dim=288):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
@@ -44,41 +44,6 @@ class Encoder(nn.Module):
         # print("features", features.shape)
         return features
 
-    '''  def __init__(self, feature_dim=64):
-        super(Encoder, self).__init__()
-        # kernel size: 1x1 kernel/window that rolls over data to find features
-        # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
-        # 3 colour channels/rgb values
-        self.conv1 = nn.Conv2d(3, 32, (1, 1))  # input is 3 images, 32 output channels, 1x1 kernel / window
-        self.conv2 = nn.Conv2d(32, 32, (1, 1))
-        #  determine the actual shape of the flattened output after the first convolutional layers.
-        img = T.rand(50, 150).view(-1, 3, 50, 50)
-        self._to_linear = None
-        self.convs(img)
-        self.fc1 = nn.Linear(self._to_linear, feature_dim)
-    # Number of Linear input connections depends on output of conv2d layers
-    # and therefore the input image size, so compute it.
-    def convs(self, img):
-        print("img before relu", img.shape)
-        img = self.conv1(img)
-        img = self.conv2(img)
-        print("img shape after filtering in convs", img.shape)
-        # To flatten the image we need to just grab the dimensions and multiply them
-        if self._to_linear is None:
-            # self._to_linear = x[0].shape[0]*x[0].shape[1]*x[0]
-            # self._to_linear = self._to_linear.detach().numpy()
-            self._to_linear = img[0].shape[0]*img[0].shape[1]*img[0].shape[2]
-            # print(self._to_linear)
-        # print(img.shape)
-        return img
-    def forward(self, img):
-        print("img shape in forward encoder before", img.shape)
-        img = self.convs(img)
-        img = img.view(1, self._to_linear)  # .view is reshape ... this flattens X before
-        print("img shape in forward encoder after reshaping", img.shape)
-        img = self.fc1(img)
-        return F.softmax(img, dim=1)'''
-
 
 # AC3 is the actual on-policy algorithm to generate the policy π
 # Used for environments with discrete action spaces --> AC3
@@ -86,11 +51,11 @@ class Encoder(nn.Module):
 class ActorCritic(nn.Module):
     # The __init__ method lets the class initialize the object’s attributes
     # tau is the constant lamda from the paper
-    def __init__(self, input_dim, n_actions, gamma=0.99, tau=0.98, feature_dim=64):
+    def __init__(self, input_dim, n_actions, gamma=0.99, tau=0.98, feature_dim=288):
         super(ActorCritic, self).__init__()
         self.gamma = gamma
         self.tau = tau
-        self.encoder = Encoder(input_dim, feature_dim)
+        self.encoder = Encoder(input_dim)
         # Our network will need an input layer which will take an input and translate that into 256
         # self.input = nn.Linear(*input_dims, 256)
         self.input = nn.Linear(feature_dim, 256)

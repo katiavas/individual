@@ -16,39 +16,6 @@ import csv
 import matplotlib.pyplot as plt
 from wrapper import make_env
 
-from skimage.transform import resize
-
-
-
-def get_image(env):
-    img = env.render(mode='rgb_array')
-    print(img.shape)
-    # convert an image from one colour space to another(from rgb to gray)
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_rgb_resized = cv2.resize(img_rgb, (84, 84), interpolation=cv2.INTER_CUBIC)
-    # make all pixels black
-    # img_rgb_resized[img_rgb_resized < 255] = 0
-    # make pixel values between 0 and 1
-    img_rgb_resized = img_rgb_resized / 255
-    return img_rgb_resized
-
-
-def get_img(env, input_shape):
-    obs = env.render(mode='rgb_array')
-    new_frame = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
-    resized_screen = resize(new_frame, (84, 84))
-    # self.shape will be either 1 for grayscale or 3 for coloured image
-    new_obs = np.array(resized_screen, dtype=np.uint8).reshape(input_shape)
-    # make pixel values between 0 and 1
-    new_obs = new_obs / 255.0
-    return new_obs
-
-
-def get_screen(env):
-    screen = env.render(mode='rgb_array').transpose((2, 0, 1))
-    screen = np.ascontiguousarray(screen, dtype=np.float32) / 255
-    return T.from_numpy(screen)
-
 
 def worker(name, input_shape, n_actions, global_agent, global_icm,
            optimizer, icm_optimizer, env_id, n_threads, icm=False):
@@ -69,8 +36,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     img_shape = [input_shape[1], input_shape[2], 1]
     env = make_env(env_id, shape=img_shape)
 
-    scores2 = []
-    episode, max_steps, t_steps, scores = 0, 5000, 0, []
+    episode, max_steps, t_steps, scores = 0, 3000, 0, []
     intr = []
     while episode < max_steps:
         obs = env.reset()
@@ -133,8 +99,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # a = T.sum(intrinsic_reward)
             # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
-            if episode <= 1000:
-                scores2.append(score)
             avg_score = np.mean(scores[-100:])
             # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '
@@ -146,12 +110,12 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         x = [z for z in range(episode)]
         np.savetxt("GFG.csv",
                    scores,
-                   delimiter=", ",
+                   delimiter=",",
                    fmt='% s')
-        plot_learning_curve(x, scores, 'AC3_Final2.png')
+        plot_learning_curve(x, scores, 'AC3_Final3.png')
         # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
         # plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
-        plot_learning_curve1(x, scores, scores2, 'Plot.plt')
+        # plot_learning_curve1(x, scores, scores2, 'Plot.plt')
 
 
 """Hi, I have just finished implementing the encoders for the icm and have output some graphs, plus some graphs for cartpole implementation. Since there is no available meeting for the next two weeks and we havent met for the last 2-3 weeks, I was wondering if you have time to do a quick meeting next week? After outputing those graphs, I dont know how to proceed and to be fair I am not entirely sure what I am actually looking for, eventhough I have done progress and have followed the papaer's implementation."""

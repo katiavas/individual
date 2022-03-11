@@ -36,7 +36,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
     img_shape = [input_shape[1], input_shape[2], 1]
     env = make_env(env_id, shape=img_shape)
 
-    scores2 = []
     episode, max_steps, t_steps, scores = 0, 3000, 0, []
     intr = []
     while episode < max_steps:
@@ -100,8 +99,6 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             # a = T.sum(intrinsic_reward)
             # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)
-            if episode <= 1000:
-                scores2.append(score)
             avg_score = np.mean(scores[-100:])
             # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '

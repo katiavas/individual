@@ -33,7 +33,7 @@ class Encoder(nn.Module):
         return int(np.prod(dims.size()))
 
     def forward(self, img):
-        enc = self.conv1(img)
+        enc = F.elu(self.conv1(img))
         enc = self.conv2(enc)
         # Flattens input by reshaping it into a 1-d tensor. If start_dim are passed, only dimensions starting with start_dim are flattened
         # enc_flatten = enc.flatten(start_dim=1)

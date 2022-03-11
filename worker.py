@@ -148,7 +148,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                    scores,
                    delimiter=", ",
                    fmt='% s')
-        plot_learning_curve(x, scores, 'ICM_Final2.png')
+        plot_learning_curve(x, scores, 'AC3_Final2.png')
         # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
         # plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
         plot_learning_curve1(x, scores, scores2, 'Plot.plt')

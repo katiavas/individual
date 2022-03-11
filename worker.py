@@ -11,6 +11,7 @@ from utils import plot_learning_curve_with_shaded_error
 from utils import plot_learning_curve1
 import torch as T
 import cv2
+import csv
 # from utils import plot_learning_curve_with_shaded_error
 import matplotlib.pyplot as plt
 from wrapper import make_env
@@ -143,10 +144,13 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                 avg_score))
     if name == '1':
         x = [z for z in range(episode)]
-        print(x)
+        np.savetxt("GFG.csv",
+                   scores,
+                   delimiter=", ",
+                   fmt='% s')
         plot_learning_curve(x, scores, 'ICM_Final2.png')
-        plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
-        plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
+        # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
+        # plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
         plot_learning_curve1(x, scores, scores2, 'Plot.plt')
 
 

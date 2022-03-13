@@ -118,4 +118,3 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         # plot_learning_curve1(x, scores, scores2, 'Plot.plt')
 
 
-"""Hi, I have just finished implementing the encoders for the icm and have output some graphs, plus some graphs for cartpole implementation. Since there is no available meeting for the next two weeks and we havent met for the last 2-3 weeks, I was wondering if you have time to do a quick meeting next week? After outputing those graphs, I dont know how to proceed and to be fair I am not entirely sure what I am actually looking for, eventhough I have done progress and have followed the papaer's implementation."""

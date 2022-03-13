@@ -13,7 +13,7 @@ import numpy as np
 
 class Encoder(nn.Module):
 
-    def __init__(self, input_dims, feature_dim=64):
+    def __init__(self, input_dims, feature_dim=288):
         super(Encoder, self).__init__()
         # kernel size: 1x1 kernel/window that rolls over data to find features
         # torch.nn.Conv2d(in_channels, out_channels, kernel_size)
@@ -57,11 +57,11 @@ This is a cross entropy loss between the predicted action and the actual action 
 
 # Cartpole n_actions = 2, input_dims = 4
 class ICM(nn.Module):
-    def __init__(self, input_dims, n_actions=4, alpha=0.1, beta=0.2, feature_dim=64):
+    def __init__(self, input_dims, n_actions=4, alpha=0.1, beta=0.2, feature_dim=288):
         super(ICM, self).__init__()
         self.alpha = alpha
         self.beta = beta
-        self.encoder = Encoder(input_dims, feature_dim=64)
+        self.encoder = Encoder(input_dims, feature_dim=288)
         # print("Features", self.encoder)
         # INVERSE MODEL
         # Given successive states, what action was taken? 2 because it takes 2 of our feature representations as inputs

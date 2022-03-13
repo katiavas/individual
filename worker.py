@@ -108,11 +108,11 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
                 avg_score))
     if name == '1':
         x = [z for z in range(episode)]
-        np.savetxt("GFG.csv",
+        np.savetxt("ac3.csv",
                    scores,
                    delimiter=",",
                    fmt='% s')
-        plot_learning_curve(x, scores, 'AC3_Final3.png')
+        plot_learning_curve(x, scores, 'AC3_extrinsic.png')
         # plot_intrinsic_reward_avg(x, intr, 'ICM_intr_avg1.png')
         # plot_learning_curve_with_shaded_error(x, scores, 'Learning_curve_shaded_error_ICM.png')
         # plot_learning_curve1(x, scores, scores2, 'Plot.plt')

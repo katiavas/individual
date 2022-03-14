@@ -102,7 +102,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
             avg_score = np.mean(scores[-100:])
             # avg_score_5000 = np.mean(scores[max(0, episode - 5000): episode + 1])
             print('ICM episode {} thread {} of {} steps {:.2f}M score {:.2f} '
-                  'avg score (100)(5000) {:.2f}'.format(
+                  'avg score (100) {:.2f}'.format(
                 episode, name, n_threads,
                 t_steps / 1e6, score,
                 avg_score))

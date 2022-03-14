@@ -78,31 +78,6 @@ def make_env(env_name, shape=(42, 42, 1), repeat=4):
 
 # https://alexandervandekleut.github.io/gym-wrappers/
 # Wrapper that helps modify/preprocess observations
-class RepeatAction(gym.Wrapper):
-    def __init__(self, env=None, repeat=4, fire_first=False):
-        super(RepeatAction, self).__init__(env)
-        self.repeat = repeat
-        self.shape = env.observation_space.low.shape
-        self.fire_first = fire_first
-    # set the total reward to 0 and done to False
-    def step(self, action):
-        t_reward = 0.0
-        done = False
-        for i in range(self.repeat):
-            obs, reward, done, info = self.env.step(action)
-            t_reward += reward
-            if done:
-                break
-        return obs, t_reward, done, info
-
-    def reset(self):
-        obs = self.env.reset()
-        if self.fire_first:
-            assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
-            obs, _, _, _ = self.env_step(1)
-        return obs
-
-
 class InputImg(gym.ObservationWrapper):
     def __init__(self, input_shape, env):
         # call super constructor with the environment as an input
@@ -124,8 +99,7 @@ class InputImg(gym.ObservationWrapper):
         return new_obs
 
 
-def make_env(env_name, shape=(42, 42, 1), repeat=4):
-    env = RepeatAction(env_name, repeat)
+def make_env(env_name, shape=(42, 42, 1)):
     env = gym.make(env_name)
     env = InputImg(shape, env)
     return env

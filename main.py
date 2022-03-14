@@ -20,7 +20,7 @@ if __name__ == '__main__':
     n_actions = 4
     # n_actions = 2
     # print(input_shape)
-    input_shape = [4, 42, 42]
+    input_shape = [1, 42, 42]
     env = ParallelEnv(env_id=env_id, n_threads=n_threads,
                       n_actions=n_actions, input_shape=input_shape, icm=False)
                       

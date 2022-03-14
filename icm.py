@@ -62,7 +62,6 @@ class ICM(nn.Module):
         self.alpha = alpha
         self.beta = beta
         self.encoder = Encoder(input_dims, feature_dim=288)
-        # print("Features", self.encoder)
         # INVERSE MODEL
         # Given successive states, what action was taken? 2 because it takes 2 of our feature representations as inputs
         self.inverse = nn.Linear(feature_dim * 2, 256)
@@ -90,15 +89,15 @@ class ICM(nn.Module):
         # new_state = new_state.view(new_state.size()[0], -1).to(T.float)
         # print(new_state.shape, "new")
         # Create inverse layer
-        inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))
-        pi_logits = self.pi_logits(inverse)
+        inverse = F.elu(self.inverse(T.cat([state, new_state], dim=1)))  # Concat two feature vectors
+        pi_logits = self.pi_logits(inverse)  # Pass it through a linear layer with 256 units, followed by output with n_actions
 
         # Forward model
         # from [T] to [T,1]
         action = action.reshape((action.size()[0], 1))
         # Activate the forward input and get a new state on the other end
-        forward_input = T.cat([state, action], dim=1)
-        dense = F.elu(self.dense1(forward_input))
+        forward_input = T.cat([state, action], dim=1)  # Concat feature vector and action
+        dense = F.elu(self.dense1(forward_input))  # pass through 2 linear layers with 256 and 288 units
         state_ = self.new_state(dense)
         # print(state_.shape, "s")
         return new_state, pi_logits, state_

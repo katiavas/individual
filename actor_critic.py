@@ -62,6 +62,7 @@ class ActorCritic(nn.Module):
         self.dense = nn.Linear(256, 256)
         # Lstm type layer receives the reward
         self.gru = nn.GRUCell(256, 256)
+        # Policy
         self.pi = nn.Linear(256, n_actions)
         self.v = nn.Linear(256, 1)
         device = T.device('cpu')

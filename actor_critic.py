@@ -19,11 +19,9 @@ class Encoder(nn.Module):
         # Using the last 3 frames gives our models access to velocity information (i.e. how fast and which direction things are moving) rather than just positional information.
         self.conv1 = nn.Conv2d(input_dims[0], 32, 3, stride=2, padding=1)
         self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        # input is 3 images, 32 output channels, 1x1 kernel / window
+        # input is 3 images, 32 output channels, 3x3 kernel / window
         shape = self.conv_output(input_dims)
         #  determine the actual shape of the flattened output after the first convolutional layers.
-        # self.fc1 = nn.Linear(7680000, feature_dim) # shape for CartPole-v0
-        # self.fc1 = nn.Linear(1075200, feature_dim) # shape for Breakout-v0
         self.fc1 = nn.Linear(shape, feature_dim)  # shape after resize 240x160
         # self.fc1 = nn.Linear(225792, feature_dim)  # shape after resize for 84x84
 

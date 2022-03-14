@@ -16,13 +16,13 @@ if __name__ == '__main__':
     memory = Memory()
     env_id = 'ALE/Breakout-v5'
     # env_id = 'CartPole-v1'
-    n_threads = 4
+    n_threads = 12
     n_actions = 4
     # n_actions = 2
     # print(input_shape)
     input_shape = [1, 42, 42]
     env = ParallelEnv(env_id=env_id, n_threads=n_threads,
-                      n_actions=n_actions, input_shape=input_shape, icm=False)
+                      n_actions=n_actions, input_shape=input_shape, icm=True)
                       
                       
 # CartPole ++> n_actions = 2 , input_shape/input_dims = 4

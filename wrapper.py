@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import gym
 import collections
-'''
+''''
 class RepeatAction(gym.Wrapper):
     def __init__(self, env=None, repeat=4, fire_first=False):
         super(RepeatAction, self).__init__(env)
@@ -26,8 +26,6 @@ class RepeatAction(gym.Wrapper):
             assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
             obs, _, _, _ = self.env_step(1)
         return obs
-'''
-
 class PreprocessFrame(gym.ObservationWrapper):
     def __init__(self, shape, env=None):
         super(PreprocessFrame, self).__init__(env)
@@ -76,8 +74,35 @@ def make_env(env_name, shape=(42, 42, 1), repeat=4):
     env = StackFrames(env, repeat)
     return env
 '''
+
+
 # https://alexandervandekleut.github.io/gym-wrappers/
 # Wrapper that helps modify/preprocess observations
+class RepeatAction(gym.Wrapper):
+    def __init__(self, env=None, repeat=4, fire_first=False):
+        super(RepeatAction, self).__init__(env)
+        self.repeat = repeat
+        self.shape = env.observation_space.low.shape
+        self.fire_first = fire_first
+    # set the total reward to 0 and done to False
+    def step(self, action):
+        t_reward = 0.0
+        done = False
+        for i in range(self.repeat):
+            obs, reward, done, info = self.env.step(action)
+            t_reward += reward
+            if done:
+                break
+        return obs, t_reward, done, info
+
+    def reset(self):
+        obs = self.env.reset()
+        if self.fire_first:
+            assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
+            obs, _, _, _ = self.env_step(1)
+        return obs
+
+
 class InputImg(gym.ObservationWrapper):
     def __init__(self, input_shape, env):
         # call super constructor with the environment as an input
@@ -87,6 +112,7 @@ class InputImg(gym.ObservationWrapper):
         self.observation_space = gym.spaces.Box(low=0.0, high=1.0,
                                                 shape=self.shape,
                                                 dtype=np.float32)
+
     # override the observation method of the environment
     def observation(self, obs):
         input_img = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
@@ -98,7 +124,8 @@ class InputImg(gym.ObservationWrapper):
         return new_obs
 
 
-def make_env(env_name, shape=(42, 42, 1)):
+def make_env(env_name, shape=(42, 42, 1), repeat=4):
+    env = RepeatAction(env_name, repeat)
     env = gym.make(env_name)
     env = InputImg(shape, env)
-    return env'''
+    return env

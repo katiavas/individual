@@ -2,14 +2,14 @@ import cv2
 import numpy as np
 import gym
 import collections
-
+'''
 class RepeatAction(gym.Wrapper):
     def __init__(self, env=None, repeat=4, fire_first=False):
         super(RepeatAction, self).__init__(env)
         self.repeat = repeat
         self.shape = env.observation_space.low.shape
         self.fire_first = fire_first
-
+    # set the total reward to 0 and done to False
     def step(self, action):
         t_reward = 0.0
         done = False
@@ -26,7 +26,7 @@ class RepeatAction(gym.Wrapper):
             assert self.env.unwrapped.get_action_meanings()[1] == 'FIRE'
             obs, _, _, _ = self.env_step(1)
         return obs
-
+'''
 
 class PreprocessFrame(gym.ObservationWrapper):
     def __init__(self, shape, env=None):
@@ -71,7 +71,7 @@ class StackFrames(gym.ObservationWrapper):
 
 def make_env(env_name, shape=(42, 42, 1), repeat=4):
     env = gym.make(env_name)
-    env = RepeatAction(env, repeat)
+    # env = RepeatAction(env, repeat)
     env = PreprocessFrame(shape, env)
     env = StackFrames(env, repeat)
     return env

@@ -75,9 +75,9 @@ class ActorCritic(nn.Module):
         # print("actor critic forward image", img)
         state = self.encoder(img)
         # print("Forward model state/img shape", state.shape)
-        # x = F.relu(self.input(state))
+        x = F.relu(self.input(state))
         # x = F.relu(self.dense(x))
-        hx = self.gru(state, hx)
+        hx = self.gru(x, hx)
         # Pass hidden state into our pi and v layer to get our logs for our policy(pi) and out value function
         pi = self.pi(hx)
         v = self.v(hx)

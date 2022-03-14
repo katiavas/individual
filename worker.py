@@ -96,6 +96,7 @@ def worker(name, input_shape, n_actions, global_agent, global_icm,
         # with global_idx.get_lock():
         #    global_idx.value += 1
         if name == '1':
+            print(intrinsic_reward)
             # a = T.sum(intrinsic_reward)
             # intr.append(a.detach().numpy())  # for plotting intrinsic reward
             scores.append(score)

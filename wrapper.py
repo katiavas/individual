@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import gym
-
+import collections
 
 class RepeatAction(gym.Wrapper):
     def __init__(self, env=None, repeat=4, fire_first=False):

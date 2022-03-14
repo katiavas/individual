@@ -58,11 +58,11 @@ class ActorCritic(nn.Module):
         self.encoder = Encoder(input_dim, feature_dim)
         # Our network will need an input layer which will take an input and translate that into 256
         # self.input = nn.Linear(*input_dims, 256)
-        self.input = nn.Linear(feature_dim, 256)
-        self.dense = nn.Linear(256, 256)  # A dense layer
+        # self.input = nn.Linear(feature_dim, 256)
+        # self.dense = nn.Linear(256, 256)  # A dense layer
 
         # Lstm type layer receives the reward
-        self.gru = nn.GRUCell(256, 256)
+        self.gru = nn.GRUCell(feature_dim, 256)
         self.pi = nn.Linear(256, n_actions)  # Policy
         self.v = nn.Linear(256, 1)
         device = T.device('cpu')
@@ -74,9 +74,9 @@ class ActorCritic(nn.Module):
         # print("actor critic forward image", img)
         state = self.encoder(img)
         # print("Forward model state/img shape", state.shape)
-        x = F.relu(self.input(state))
-        x = F.relu(self.dense(x))
-        hx = self.gru(x, hx)
+        # x = F.relu(self.input(state))
+        # x = F.relu(self.dense(x))
+        hx = self.gru(state, hx)
         # Pass hidden state into our pi and v layer to get our logs for our policy(pi) and out value function
         pi = self.pi(hx)
         v = self.v(hx)

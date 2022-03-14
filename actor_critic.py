@@ -57,8 +57,8 @@ class ActorCritic(nn.Module):
         self.encoder = Encoder(input_dim, feature_dim)
         # Our network will need an input layer which will take an input and translate that into 256
         # self.input = nn.Linear(*input_dims, 256)
-        self.input = nn.Linear(feature_dim, 256)
-        self.dense = nn.Linear(256, 256)  # A dense layer
+        # self.input = nn.Linear(feature_dim, 256)
+        # self.dense = nn.Linear(256, 256)  # A dense layer
 
         # Lstm type layer receives the reward
         self.gru = nn.GRUCell(feature_dim, 256)

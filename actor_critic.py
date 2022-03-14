@@ -59,10 +59,10 @@ class ActorCritic(nn.Module):
         # self.input = nn.Linear(*input_dims, 256)
         self.input = nn.Linear(feature_dim, 256)
         # A dense layer
-        self.dense = nn.Linear(256, 256)
+        # self.dense = nn.Linear(256, 256)
         # conv_shape = self.encoder.conv_output(input_dim)
         # Lstm type layer receives the reward
-        self.gru = nn.GRUCell(64, 256)
+        self.gru = nn.GRUCell(256, 256)
         # Policy
         self.pi = nn.Linear(256, n_actions)
         self.v = nn.Linear(256, 1)
